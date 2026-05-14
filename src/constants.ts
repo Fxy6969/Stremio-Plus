@@ -128,7 +128,7 @@ export const FILE_EXTENSIONS = {
 export const URLS = {
     STREMIO_WEB: 'https://web.stremio.com/',
     STREMIO_WEB_ADD_ADDON: 'https://web.stremio.com/#/addons?addon=',
-    REGISTRY: 'https://raw.githubusercontent.com/REVENGE977/stremio-enhanced-registry/refs/heads/main/registry.json',
+    REGISTRY: 'https://raw.githubusercontent.com/Fxy6969/stremio-plus-registry/main/registry.json',
     VERSION_CHECK: 'https://github.com/Fxy6969/stremio-plus/raw/main/version',
     RELEASES_API: 'https://api.github.com/repos/Fxy6969/stremio-plus/releases/latest',
     RELEASES_PAGE: 'https://github.com/Fxy6969/stremio-plus/releases/latest',
