@@ -630,7 +630,7 @@
         .st-cl-loading { padding:32px !important; text-align:center !important; font-size:11px !important; color:rgba(255,255,255,0.22) !important; }
         /* ── Plugin wizard ── */
         /* ── Plugin wizard (now inside dev tab) ── */
-        .st-wiz-form { padding:12px !important; display:flex !important; flex-direction:column !important; gap:8px !important; overflow-y:auto !important; max-height:320px !important; }
+        .st-wiz-form { padding:12px !important; display:flex !important; flex-direction:column !important; gap:8px !important; overflow-y:auto !important; flex:1 !important; min-height:0 !important; }
         .st-wiz-form::-webkit-scrollbar { width:3px !important; }
         .st-wiz-row { display:flex !important; flex-direction:column !important; gap:4px !important; }
         .st-wiz-label { font-size:10px !important; color:rgba(255,255,255,0.28) !important; }
@@ -994,6 +994,138 @@
         .sp-search-kbd-hint { display:inline-flex; align-items:center; gap:3px; flex-shrink:0; opacity:0.6; }
         #__st_search_row__.cmd-mode { background:rgba(255,255,255,0.02); }
         #__st_search_row__.cmd-mode .st-search-icon { color:var(--st-accent,rgba(255,255,255,0.9)); opacity:0.8; }
+        /* ── First-run onboarding overlay ── */
+        #__st_intro__ { position:fixed !important; inset:0 !important; z-index:100 !important; display:flex !important; align-items:center !important; justify-content:center !important; overflow-y:auto !important; padding:16px !important; background:radial-gradient(900px 700px at 50% 50%,rgba(0,0,0,0.58) 0%,rgba(0,0,0,0.82) 80%) !important; opacity:0 !important; transition:opacity 0.4s ease !important; pointer-events:none !important; animation:onb-overlay-in 0.32s cubic-bezier(0.22,1,0.36,1) !important; }
+        #__st_intro__.visible { opacity:1 !important; pointer-events:all !important; }
+        #__st_intro__.leaving { opacity:0 !important; pointer-events:none !important; transition:opacity 0.3s cubic-bezier(0.4,0,1,1) !important; }
+        @keyframes onb-overlay-in { from { opacity:0; } to { opacity:1; } }
+        /* Panel card */
+        .onb-panel { position:relative !important; width:min(720px,calc(100vw - 32px)) !important; display:flex !important; flex-direction:column !important; border-radius:24px !important; background:linear-gradient(180deg,hsla(var(--accent-h,270),30%,18%,0.42) 0%,rgba(18,16,24,0.6) 60%,rgba(10,9,14,0.7) 100%) !important; background-color:rgba(14,12,18,0.62) !important; backdrop-filter:blur(40px) saturate(180%) !important; -webkit-backdrop-filter:blur(40px) saturate(180%) !important; border:0.5px solid rgba(255,255,255,0.1) !important; box-shadow:0 0 0 0.5px rgba(255,255,255,0.06) inset,0 1px 0 0 rgba(255,255,255,0.09) inset,0 -1px 0 0 rgba(0,0,0,0.4) inset,0 36px 100px rgba(0,0,0,0.65),0 8px 24px rgba(0,0,0,0.45),0 0 80px var(--accent-glow,transparent) !important; overflow:hidden !important; animation:sp-panel-in 0.45s cubic-bezier(0.22,1,0.36,1) !important; }
+        .onb-panel::before { content:"" !important; position:absolute !important; top:0 !important; left:10% !important; right:10% !important; height:1px !important; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.45),transparent) !important; pointer-events:none !important; }
+        .onb-panel::after { content:"" !important; position:absolute !important; inset:0 !important; pointer-events:none !important; background:radial-gradient(700px 240px at 50% -100px,var(--accent-soft,transparent),transparent 70%),radial-gradient(500px 360px at 100% 100%,hsla(var(--accent-h,270),50%,50%,0.07),transparent 60%) !important; border-radius:24px !important; }
+        /* Step rail */
+        .onb-rail { position:relative !important; z-index:1 !important; display:flex !important; align-items:center !important; gap:6px !important; padding:14px 24px 0 !important; }
+        .onb-rail-dot { flex:1 !important; height:3px !important; border-radius:2px !important; background:rgba(255,255,255,0.06) !important; position:relative !important; overflow:hidden !important; transition:background 0.3s !important; }
+        .onb-rail-dot.done { background:rgba(255,255,255,0.18) !important; }
+        .onb-rail-dot.done::after { content:"" !important; position:absolute !important; inset:0 !important; background:var(--accent,hsl(270 75% 70%)) !important; opacity:0.55 !important; }
+        .onb-rail-dot.active { background:rgba(255,255,255,0.08) !important; }
+        .onb-rail-dot.active::after { content:"" !important; position:absolute !important; inset:0 !important; background:linear-gradient(90deg,var(--accent,hsl(270 75% 70%)),hsla(var(--accent-h,270),80%,70%,0.6)) !important; box-shadow:0 0 8px var(--accent-glow,transparent) !important; animation:onb-rail-fill 0.6s cubic-bezier(0.22,1,0.36,1) !important; transform-origin:left !important; }
+        @keyframes onb-rail-fill { from { transform:scaleX(0); } to { transform:scaleX(1); } }
+        .onb-rail-meta { display:flex !important; justify-content:space-between !important; align-items:center !important; padding:8px 24px 0 !important; position:relative !important; z-index:1 !important; font-size:11px !important; font-family:ui-monospace,"SF Mono",Menlo,monospace !important; color:rgba(255,255,255,0.4) !important; letter-spacing:0.06em !important; text-transform:uppercase !important; }
+        .onb-rail-meta-skip { all:unset !important; cursor:pointer !important; color:rgba(255,255,255,0.4) !important; transition:color 0.18s !important; }
+        .onb-rail-meta-skip:hover { color:rgba(255,255,255,0.75) !important; }
+        /* Body */
+        .onb-body { position:relative !important; z-index:1 !important; padding:14px 36px 0 !important; flex:1 !important; min-height:0 !important; overflow-y:auto !important; scrollbar-width:thin !important; scrollbar-color:rgba(255,255,255,0.1) transparent !important; animation:onb-body-in 0.36s cubic-bezier(0.22,1,0.36,1) !important; }
+        @keyframes onb-body-in { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+        /* Welcome hero */
+        .onb-hero { display:flex !important; flex-direction:column !important; align-items:center !important; padding:4px 0 10px !important; }
+        .onb-logo { width:56px !important; height:56px !important; border-radius:16px !important; display:flex !important; align-items:center !important; justify-content:center !important; font-size:24px !important; font-weight:700 !important; letter-spacing:-0.02em !important; color:#fff !important; background:linear-gradient(160deg,hsla(var(--accent-h,270),80%,70%,1) 0%,hsla(var(--accent-h,270),65%,45%,1) 100%) !important; box-shadow:0 0 0 0.5px rgba(255,255,255,0.18) inset,0 -2px 6px hsla(var(--accent-h,270),80%,30%,0.6) inset,0 1px 0 rgba(255,255,255,0.35) inset,0 16px 38px hsla(var(--accent-h,270),80%,50%,0.55),0 0 32px var(--accent-glow,transparent) !important; text-shadow:0 1px 1px rgba(0,0,0,0.25) !important; margin-bottom:10px !important; animation:onb-logo-float 6s ease-in-out infinite !important; }
+        .onb-logo-plus { font-size:22px !important; margin-left:-2px !important; }
+        @keyframes onb-logo-float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-4px); } }
+        .onb-title { font-size:26px !important; font-weight:700 !important; letter-spacing:-0.025em !important; color:rgba(255,255,255,0.98) !important; margin:0 !important; text-align:center !important; }
+        .onb-subtitle { font-size:13px !important; color:rgba(255,255,255,0.55) !important; margin:6px 0 0 !important; text-align:center !important; max-width:440px !important; line-height:1.5 !important; }
+        .onb-step-head { margin-bottom:24px !important; }
+        .onb-step-head .onb-title { text-align:left !important; font-size:24px !important; }
+        .onb-step-head .onb-subtitle { text-align:left !important; margin-left:0 !important; max-width:100% !important; }
+        /* Welcome feature list */
+        .onb-feat-list { display:flex !important; flex-direction:column !important; gap:6px !important; margin-top:6px !important; }
+        .onb-feat { display:flex !important; align-items:center !important; gap:12px !important; padding:10px 14px !important; border-radius:14px !important; background:rgba(255,255,255,0.025) !important; border:0.5px solid rgba(255,255,255,0.05) !important; box-shadow:0 1px 0 rgba(255,255,255,0.04) inset !important; }
+        .onb-feat-ico { flex-shrink:0 !important; width:36px !important; height:36px !important; border-radius:10px !important; display:flex !important; align-items:center !important; justify-content:center !important; background:var(--accent-soft,rgba(255,255,255,0.08)) !important; border:0.5px solid hsla(var(--accent-h,270),70%,60%,0.25) !important; color:hsla(var(--accent-h,270),80%,80%,1) !important; }
+        .onb-feat-body { flex:1 !important; min-width:0 !important; }
+        .onb-feat-title { font-size:14px !important; font-weight:600 !important; color:rgba(255,255,255,0.95) !important; margin-bottom:2px !important; }
+        .onb-feat-sub { font-size:12.5px !important; color:rgba(255,255,255,0.5) !important; }
+        .onb-welcome-cta { display:flex !important; flex-direction:column !important; align-items:center !important; gap:12px !important; padding:14px 0 6px !important; }
+        .onb-welcome-cta-skip { all:unset !important; cursor:pointer !important; font-size:12px !important; color:rgba(255,255,255,0.4) !important; transition:color 0.18s !important; }
+        .onb-welcome-cta-skip:hover { color:rgba(255,255,255,0.7) !important; }
+        /* Accent step */
+        .onb-accent-preview { position:relative !important; height:140px !important; border-radius:14px !important; background:radial-gradient(400px 200px at 30% 50%,var(--accent-soft,rgba(255,255,255,0.05)),transparent 70%),linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01)) !important; border:0.5px solid rgba(255,255,255,0.06) !important; margin-bottom:22px !important; overflow:hidden !important; display:flex !important; align-items:center !important; justify-content:center !important; gap:14px !important; }
+        .onb-accent-chip { display:inline-flex !important; align-items:center !important; gap:6px !important; padding:7px 12px !important; border-radius:999px !important; font-size:12px !important; font-weight:500 !important; background:var(--accent-soft,rgba(255,255,255,0.08)) !important; color:var(--accent,hsl(270 75% 70%)) !important; border:0.5px solid hsla(var(--accent-h,270),70%,60%,0.35) !important; }
+        .onb-accent-btn { font-family:inherit !important; font-size:12.5px !important; font-weight:600 !important; color:#fff !important; padding:9px 16px !important; border-radius:10px !important; border:none !important; cursor:pointer !important; background:var(--accent,hsl(270 75% 70%)) !important; box-shadow:0 0 24px var(--accent-glow,transparent),0 4px 12px hsla(var(--accent-h,270),70%,30%,0.4) !important; }
+        .onb-accent-grid { display:grid !important; grid-template-columns:repeat(5,1fr) !important; gap:10px !important; padding: 5px !important; }
+        .onb-accent-swatch { all:unset !important; cursor:pointer !important; position:relative !important; height:76px !important; border-radius:14px !important; background:linear-gradient(160deg,hsl(var(--s-c)),hsl(var(--s-c)/0.7)) !important; display:flex !important; align-items:flex-end !important; justify-content:center !important; padding-bottom:10px !important; font-size:11px !important; font-weight:600 !important; color:rgba(255,255,255,0.9) !important; letter-spacing:0.02em !important; text-transform:capitalize !important; border:0.5px solid rgba(255,255,255,0.08) !important; box-shadow:0 1px 0 rgba(255,255,255,0.15) inset,0 -8px 16px rgba(0,0,0,0.15) inset,0 8px 18px rgba(0,0,0,0.3) !important; transition:transform 0.18s,box-shadow 0.18s !important; }
+        .onb-accent-swatch:hover { transform:translateY(-2px) !important; }
+        .onb-accent-swatch.on { outline:2px solid #fff !important; outline-offset:3px !important; box-shadow:0 1px 0 rgba(255,255,255,0.2) inset,0 -8px 16px rgba(0,0,0,0.15) inset,0 14px 30px rgba(0,0,0,0.35),0 0 28px hsl(var(--s-c)/0.6) !important; }
+        .onb-accent-swatch-check { position:absolute !important; top:8px !important; right:8px !important; width:18px !important; height:18px !important; border-radius:50% !important; background:rgba(0,0,0,0.4) !important; border:0.5px solid rgba(255,255,255,0.4) !important; display:flex !important; align-items:center !important; justify-content:center !important; color:#fff !important; opacity:0 !important; transition:opacity 0.18s !important; }
+        .onb-accent-swatch.on .onb-accent-swatch-check { opacity:1 !important; }
+        /* Backend/server step */
+        .onb-server { display:flex !important; align-items:center !important; gap:14px !important; padding:14px 16px !important; border-radius:13px !important; background:rgba(255,255,255,0.025) !important; border:0.5px solid rgba(255,255,255,0.05) !important; margin-bottom:8px !important; cursor:pointer !important; transition:background 0.18s,border-color 0.18s !important; }
+        .onb-server.on { background:rgba(255,255,255,0.04) !important; border-color:hsla(var(--accent-h,270),70%,60%,0.25) !important; box-shadow:0 0 0 0.5px hsla(var(--accent-h,270),70%,60%,0.2) inset !important; }
+        .onb-server-flag { flex-shrink:0 !important; width:38px !important; height:38px !important; border-radius:10px !important; display:flex !important; align-items:center !important; justify-content:center !important; font-size:10px !important; font-weight:700 !important; letter-spacing:0.06em !important; color:rgba(255,255,255,0.7) !important; background:linear-gradient(180deg,hsla(var(--region-h,270),35%,30%,0.6),hsla(var(--region-h,270),35%,16%,0.7)) !important; border:0.5px solid hsla(var(--region-h,270),70%,60%,0.25) !important; font-family:ui-monospace,"SF Mono",Menlo,monospace !important; }
+        .onb-server-body { flex:1 !important; min-width:0 !important; }
+        .onb-server-name-row { display:flex !important; align-items:center !important; gap:8px !important; flex-wrap:wrap !important; }
+        .onb-server-name { font-size:13.5px !important; font-weight:600 !important; color:rgba(255,255,255,0.95) !important; }
+        .onb-server-sub { font-size:12px !important; color:rgba(255,255,255,0.5) !important; margin-top:2px !important; }
+        .onb-server-pill { font-size:9.5px !important; font-weight:600 !important; letter-spacing:0.06em !important; text-transform:uppercase !important; padding:2px 7px !important; border-radius:999px !important; background:var(--accent-soft,rgba(255,255,255,0.08)) !important; color:var(--accent,hsl(270 75% 70%)) !important; border:0.5px solid hsla(var(--accent-h,270),70%,60%,0.3) !important; }
+        .onb-server-pill.req { background:rgba(255,255,255,0.06) !important; color:rgba(255,255,255,0.6) !important; border-color:rgba(255,255,255,0.1) !important; }
+        .onb-server-pings { display:inline-flex !important; align-items:flex-end !important; gap:2px !important; height:14px !important; flex-shrink:0 !important; }
+        .onb-server-ping { width:3px !important; border-radius:1.5px !important; background:var(--accent,hsl(270 75% 70%)) !important; opacity:0.85 !important; }
+        .onb-server-ping.dim { background:rgba(255,255,255,0.15) !important; opacity:1 !important; }
+        .onb-server-ms { font-size:10.5px !important; font-family:ui-monospace,"SF Mono",Menlo,monospace !important; color:rgba(255,255,255,0.4) !important; letter-spacing:0.04em !important; flex-shrink:0 !important; }
+        /* Theme step */
+        .onb-theme-card { position:relative !important; border-radius:16px !important; padding:22px !important; background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.015)) !important; border:0.5px solid rgba(255,255,255,0.06) !important; overflow:hidden !important; margin-bottom:16px !important; }
+        .onb-theme-card::after { content:"" !important; position:absolute !important; inset:0 !important; background:radial-gradient(280px 140px at 100% 0%,var(--accent-soft,rgba(255,255,255,0.04)),transparent 70%) !important; pointer-events:none !important; }
+        .onb-theme-preview { position:relative !important; z-index:1 !important; height:140px !important; border-radius:12px !important; overflow:hidden !important; border:0.5px solid rgba(255,255,255,0.08) !important; background:radial-gradient(400px 200px at 80% 30%,hsla(var(--accent-h,270),70%,50%,0.25),transparent 60%),linear-gradient(140deg,#0c0a14 0%,#1c1530 60%,#251c45 100%) !important; box-shadow:0 8px 24px rgba(0,0,0,0.4) !important; margin-bottom:18px !important; display:flex !important; align-items:center !important; justify-content:center !important; }
+        .onb-theme-mini { width:60% !important; height:70% !important; border-radius:10px !important; background:rgba(255,255,255,0.06) !important; backdrop-filter:blur(20px) saturate(140%) !important; border:0.5px solid rgba(255,255,255,0.12) !important; box-shadow:0 1px 0 rgba(255,255,255,0.12) inset,0 12px 28px rgba(0,0,0,0.4),0 0 30px var(--accent-glow,transparent) !important; padding:10px !important; display:flex !important; flex-direction:column !important; gap:6px !important; }
+        .onb-theme-mini-row { height:8px !important; border-radius:3px !important; background:rgba(255,255,255,0.08) !important; }
+        .onb-theme-mini-row.short { width:50% !important; }
+        .onb-theme-mini-row.accent { background:var(--accent,hsl(270 75% 70%)) !important; box-shadow:0 0 8px var(--accent-glow,transparent) !important; }
+        .onb-theme-meta { position:relative !important; z-index:1 !important; }
+        .onb-theme-name { font-size:16px !important; font-weight:600 !important; color:rgba(255,255,255,0.95) !important; margin-bottom:4px !important; }
+        .onb-theme-desc { font-size:13px !important; color:rgba(255,255,255,0.55) !important; line-height:1.55 !important; margin-bottom:14px !important; }
+        .onb-theme-specs { display:flex !important; gap:16px !important; font-size:11px !important; font-family:ui-monospace,"SF Mono",Menlo,monospace !important; color:rgba(255,255,255,0.4) !important; letter-spacing:0.04em !important; text-transform:uppercase !important; padding-top:14px !important; border-top:0.5px solid rgba(255,255,255,0.05) !important; }
+        .onb-theme-spec strong { color:rgba(255,255,255,0.85) !important; font-weight:600 !important; margin-left:6px !important; }
+        .onb-install-bar { position:relative !important; height:38px !important; border-radius:10px !important; background:rgba(255,255,255,0.04) !important; border:0.5px solid rgba(255,255,255,0.08) !important; overflow:hidden !important; display:flex !important; align-items:center !important; justify-content:center !important; font-size:12.5px !important; font-weight:600 !important; cursor:pointer !important; transition:background 0.18s !important; color:rgba(255,255,255,0.95) !important; }
+        .onb-install-bar:hover { background:rgba(255,255,255,0.06) !important; }
+        .onb-install-bar.installing,.onb-install-bar.done { cursor:default !important; }
+        .onb-install-bar.done { background:hsla(150,50%,30%,0.18) !important; border-color:hsla(150,60%,45%,0.4) !important; }
+        .onb-install-fill { position:absolute !important; inset:0 !important; background:linear-gradient(90deg,hsla(var(--accent-h,270),70%,55%,0.4),hsla(var(--accent-h,270),80%,70%,0.5)) !important; transform-origin:left !important; box-shadow:0 0 20px var(--accent-glow,transparent) !important; }
+        .onb-install-label { position:relative !important; z-index:1 !important; display:inline-flex !important; align-items:center !important; gap:8px !important; }
+        .onb-install-spinner { width:12px !important; height:12px !important; border-radius:50% !important; border:1.5px solid rgba(255,255,255,0.3) !important; border-top-color:#fff !important; animation:onb-spin 0.8s linear infinite !important; display:inline-block !important; }
+        @keyframes onb-spin { to { transform:rotate(360deg); } }
+        /* Plugins step */
+        .onb-plug { display:flex !important; align-items:center !important; gap:14px !important; padding:12px 14px !important; border-radius:12px !important; background:rgba(255,255,255,0.02) !important; border:0.5px solid rgba(255,255,255,0.05) !important; margin-bottom:6px !important; cursor:pointer !important; transition:background 0.18s,border-color 0.18s !important; }
+        .onb-plug:hover { background:rgba(255,255,255,0.04) !important; }
+        .onb-plug.on { background:rgba(255,255,255,0.05) !important; border-color:hsla(var(--accent-h,270),70%,60%,0.3) !important; }
+        .onb-plug-check { flex-shrink:0 !important; width:22px !important; height:22px !important; border-radius:7px !important; display:flex !important; align-items:center !important; justify-content:center !important; background:rgba(255,255,255,0.04) !important; border:0.5px solid rgba(255,255,255,0.1) !important; color:transparent !important; transition:background 0.18s,color 0.18s !important; }
+        .onb-plug.on .onb-plug-check { background:var(--accent,hsl(270 75% 70%)) !important; border-color:var(--accent,hsl(270 75% 70%)) !important; color:#fff !important; box-shadow:0 0 12px var(--accent-glow,transparent) !important; }
+        .onb-plug-icon { width:36px !important; height:36px !important; border-radius:9px !important; background:hsl(var(--ph,270) 35% 28%/0.5) !important; border:0.5px solid hsl(var(--ph,270) 70% 60%/0.3) !important; display:flex !important; align-items:center !important; justify-content:center !important; color:hsl(var(--ph,270) 80% 80%) !important; flex-shrink:0 !important; }
+        .onb-plug-body { flex:1 !important; min-width:0 !important; }
+        .onb-plug-name-row { display:flex !important; align-items:center !important; gap:6px !important; flex-wrap:wrap !important; }
+        .onb-plug-name { font-size:13px !important; font-weight:600 !important; color:rgba(255,255,255,0.94) !important; }
+        .onb-plug-by { font-size:11px !important; color:rgba(255,255,255,0.4) !important; font-family:ui-monospace,"SF Mono",Menlo,monospace !important; }
+        .onb-plug-desc { font-size:12px !important; color:rgba(255,255,255,0.5) !important; margin-top:2px !important; overflow:hidden !important; text-overflow:ellipsis !important; white-space:nowrap !important; }
+        .onb-plug-stars { font-size:11px !important; color:rgba(255,255,255,0.5) !important; display:inline-flex !important; align-items:center !important; gap:4px !important; flex-shrink:0 !important; }
+        /* Done step */
+        .onb-done { display:flex !important; flex-direction:column !important; align-items:center !important; padding:8px 0 12px !important; }
+        .onb-done-ring { position:relative !important; width:86px !important; height:86px !important; border-radius:50% !important; display:flex !important; align-items:center !important; justify-content:center !important; background:radial-gradient(circle at 35% 30%,hsla(150,80%,65%,0.8),hsla(150,65%,35%,0.7)) !important; color:#fff !important; box-shadow:0 0 0 0.5px rgba(255,255,255,0.25) inset,0 12px 32px hsla(150,60%,30%,0.5),0 0 36px hsla(150,70%,60%,0.4) !important; margin-bottom:22px !important; animation:onb-done-pop 0.5s cubic-bezier(0.22,1.6,0.36,1) !important; }
+        @keyframes onb-done-pop { from { transform:scale(0.7); opacity:0; } }
+        .onb-summary { display:grid !important; grid-template-columns:1fr 1fr !important; gap:8px !important; width:100% !important; margin-top:22px !important; }
+        .onb-sum-card { padding:12px 14px !important; border-radius:12px !important; background:rgba(255,255,255,0.025) !important; border:0.5px solid rgba(255,255,255,0.05) !important; }
+        .onb-sum-label { font-size:10px !important; letter-spacing:0.1em !important; text-transform:uppercase !important; color:rgba(255,255,255,0.4) !important; margin-bottom:6px !important; font-family:ui-monospace,"SF Mono",Menlo,monospace !important; }
+        .onb-sum-value { font-size:14px !important; font-weight:600 !important; color:rgba(255,255,255,0.95) !important; display:flex !important; align-items:center !important; gap:8px !important; }
+        .onb-sum-dot { width:12px !important; height:12px !important; border-radius:50% !important; background:var(--accent,hsl(270 75% 70%)) !important; box-shadow:0 0 10px var(--accent-glow,transparent) !important; }
+        .onb-tip { margin-top:18px !important; padding:12px 14px !important; border-radius:12px !important; background:rgba(255,255,255,0.02) !important; border:0.5px dashed rgba(255,255,255,0.1) !important; font-size:12.5px !important; color:rgba(255,255,255,0.6) !important; text-align:center !important; line-height:1.55 !important; }
+        /* Footer */
+        .onb-footer { position:relative !important; z-index:1 !important; display:flex !important; align-items:center !important; gap:10px !important; padding:14px 24px 18px !important; border-top:0.5px solid rgba(255,255,255,0.05) !important; margin-top:12px !important; flex-shrink:0 !important; }
+        .onb-foot-back { all:unset !important; cursor:pointer !important; font-size:12.5px !important; font-weight:500 !important; color:rgba(255,255,255,0.55) !important; padding:9px 14px !important; border-radius:10px !important; display:inline-flex !important; align-items:center !important; gap:6px !important; transition:background 0.18s,color 0.18s !important; }
+        .onb-foot-back:hover { background:rgba(255,255,255,0.04) !important; color:rgba(255,255,255,0.85) !important; }
+        .onb-foot-back:disabled { opacity:0 !important; pointer-events:none !important; }
+        .onb-foot-spacer { flex:1 !important; }
+        .onb-foot-hint { font-size:11px !important; color:rgba(255,255,255,0.35) !important; font-family:ui-monospace,"SF Mono",Menlo,monospace !important; display:inline-flex !important; align-items:center !important; gap:6px !important; }
+        .onb-cta { all:unset !important; cursor:pointer !important; font-size:13px !important; font-weight:600 !important; color:#fff !important; padding:11px 22px !important; border-radius:11px !important; background:linear-gradient(180deg,hsla(var(--accent-h,270),80%,75%,1) 0%,hsla(var(--accent-h,270),70%,60%,1) 100%) !important; box-shadow:0 1px 0 rgba(255,255,255,0.3) inset,0 -1px 0 rgba(0,0,0,0.25) inset,0 8px 24px var(--accent-glow,transparent),0 4px 12px hsla(var(--accent-h,270),70%,30%,0.4) !important; display:inline-flex !important; align-items:center !important; gap:8px !important; transition:transform 0.18s,box-shadow 0.18s !important; }
+        .onb-cta:hover { transform:translateY(-1px) !important; }
+        .onb-cta:disabled { opacity:0.5 !important; cursor:not-allowed !important; transform:none !important; }
+        .onb-cta.large { padding:14px 28px !important; font-size:14px !important; }
+        @keyframes sp-intro-fade-up { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+        /* ── Image lightbox ── */
+        #__st_lightbox__ { position:fixed !important; inset:0 !important; z-index:2147483647 !important; background:rgba(0,0,0,0.87) !important; backdrop-filter:blur(14px) !important; -webkit-backdrop-filter:blur(14px) !important; display:none !important; align-items:center !important; justify-content:center !important; padding:32px !important; cursor:zoom-out !important; }
+        #__st_lightbox__.open { display:flex !important; animation:st-fade-up 0.2s ease-out !important; }
+        #__st_lightbox__ img { max-width:min(900px,calc(100vw - 64px)) !important; max-height:calc(100vh - 64px) !important; border-radius:14px !important; box-shadow:0 30px 90px rgba(0,0,0,0.75) !important; object-fit:contain !important; cursor:default !important; animation:sp-lb-in 0.25s cubic-bezier(0.22,1,0.36,1) !important; }
+        #__st_lightbox_close__ { all:unset !important; cursor:pointer !important; position:fixed !important; top:20px !important; right:20px !important; width:36px !important; height:36px !important; border-radius:50% !important; background:rgba(255,255,255,0.1) !important; border:0.5px solid rgba(255,255,255,0.18) !important; display:flex !important; align-items:center !important; justify-content:center !important; color:rgba(255,255,255,0.75) !important; font-size:20px !important; font-family:inherit !important; line-height:1 !important; transition:background 0.15s !important; box-sizing:border-box !important; }
+        #__st_lightbox_close__:hover { background:rgba(255,255,255,0.18) !important; color:#fff !important; }
+        .sp-prev-tile img { cursor:zoom-in !important; transition:opacity 0.15s !important; }
+        .sp-prev-tile img:hover { opacity:0.85 !important; }
+        @keyframes sp-lb-in { from { opacity:0; transform:scale(0.9); } to { opacity:1; transform:none; } }
     `;
     document.head.appendChild(spStyle);
     
@@ -1254,6 +1386,10 @@
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                         Simulate crash
                     </button>
+                    <button type="button" class="sp-set-action sp-set-action-wide sp-set-action-danger" id="__st_clearcache_btn__">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                        Clear saved data
+                    </button>
                 </div>
             </div>
             <!-- Playback Backend -->
@@ -1383,45 +1519,67 @@
     }
     document.getElementById('__st_panel__').insertBefore(activityWrap, document.getElementById('__st_marketplace_wrap__'));
 
-    // ── Marketplace mock data + renderer ─────────────────────────────────────────
-    const MKT_DATA = [
-        { id:'captions-translate', name:'Captions Translate', version:'0.3.0', author:'harbor', type:'plugin', desc:'Live-translate subtitles via local model.', stars:88, installed:false, hue:200,
-          trending:{ weekly:1240, rank:1, deltaPct:320 },
-          previews:[
-              { title:'Live translation overlay', colors:['#0a1a2e','#1d4e89','#7ec8e3'] },
-              { title:'Language picker',           colors:['#0a1a2e','#3b6ea5','#cfe6f4'] },
-          ]},
-        { id:'ambient-light', name:'Ambient Light', version:'1.0.0', author:'lumen', type:'plugin', desc:'Match Hue bulbs to on-screen color.', stars:412, installed:false, hue:50,
-          trending:{ weekly:810, rank:2, deltaPct:180 },
-          previews:[
-              { title:'Hue bulb sync',  colors:['#1a1208','#8a5a18','#ffd27a'] },
-              { title:'Color sampling', colors:['#1a1208','#d97757','#ffba7e'] },
-          ]},
-        { id:'midnight-blue', name:'Midnight Blue', version:'1.2.0', author:'kestrel', type:'theme', desc:'Deep blue with ivory accents.', stars:263, installed:true, hue:220,
-          trending:{ weekly:210, rank:5, deltaPct:20 },
-          previews:[
-              { title:'Home screen', colors:['#06091a','#101d3d','#e8ecff'] },
-              { title:'Player',      colors:['#06091a','#1a2a55','#cfd6ff'] },
-          ]},
-        { id:'auto-quality', name:'Auto Quality', version:'0.6.1', author:'delta', type:'plugin', desc:'Pick stream resolution by bandwidth.', stars:144, installed:false, hue:290,
-          trending:{ weekly:290, rank:4, deltaPct:44 }, previews:[] },
-        { id:'rotten-overlay', name:'Rotten Overlay', version:'2.4.0', author:'northwind', type:'plugin', desc:'Show Rotten Tomatoes scores on cards.', stars:920, installed:false, hue:10,
-          trending:{ weekly:642, rank:3, deltaPct:85 },
-          previews:[
-              { title:'Score overlay', colors:['#1a0a0a','#a32a1a','#ffb6a8'] },
-              { title:'Tomato meter',  colors:['#1a0a0a','#c93a2a','#ffe6e0'] },
-          ]},
-        { id:'paper-light', name:'Paper Light', version:'1.0.0', author:'harbor', type:'theme', desc:'Light theme. Warm, low-saturation.', stars:71, installed:false, hue:30,
-          trending:{ weekly:58, rank:6, deltaPct:8 },
-          previews:[
-              { title:'Light home',    colors:['#f4ede1','#d6c5a8','#5a4632'] },
-              { title:'Light library', colors:['#f4ede1','#c9b48f','#3e2e1e'] },
-          ]},
-    ];
+    // ── Marketplace — live registry ───────────────────────────────────────────────
+    const REGISTRY_URL = 'https://raw.githubusercontent.com/Fxy6969/stremio-plus-registry/main/registry.json';
+    let MKT_DATA = [];
+    let mktLoaded = false;
     let mktFilter   = 'all';
-    let mktSort     = 'trending';
+    let mktSort     = 'stars';
     let mktExpanded = null;
-    let mktInstalled = new Set(MKT_DATA.filter(m => m.installed).map(m => m.id));
+    let mktInstalled = new Set();
+
+    function nameHue(str) {
+        let h = 0;
+        for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) & 0xffffffff;
+        return Math.abs(h) % 360;
+    }
+
+    async function loadMarketplace() {
+        if (mktLoaded) return;
+        mktLoaded = true;
+        const mktList = document.getElementById('__st_mkt_list__');
+        if (mktList) mktList.innerHTML = '<div class="st-empty"><div class="st-skel-line" style="width:60%;margin:0 auto 10px"></div><div class="st-skel-line" style="width:40%;margin:0 auto"></div></div>';
+        try {
+            const res = await fetch(REGISTRY_URL);
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            const data = await res.json();
+            const toEntry = (m, type) => ({
+                id:       m.download,
+                name:     m.name,
+                version:  m.version || '1.0.0',
+                author:   m.author,
+                type,
+                desc:     m.description || '',
+                stars:    0,
+                hue:      nameHue(m.name),
+                trending: null,
+                previews: m.preview ? [{ url: m.preview, title: m.name }] : [],
+                download: m.download,
+                repo:     m.repo || '',
+                github:   m.repo ? m.repo.replace('https://github.com/', '') : null,
+                tags:     m.tags || [],
+            });
+            MKT_DATA = [
+                ...(data.plugins || []).map(m => toEntry(m, 'plugin')),
+                ...(data.themes  || []).map(m => toEntry(m, 'theme')),
+            ];
+            // fetch stars in background
+            MKT_DATA.forEach(async m => {
+                if (!m.github) return;
+                try {
+                    const r = await fetch(`https://api.github.com/repos/${m.github}`, { headers: { Accept: 'application/vnd.github+json' } });
+                    if (!r.ok) return;
+                    const j = await r.json();
+                    m.stars = j.stargazers_count || 0;
+                    const el = document.getElementById('__st_mkt_stars_' + m.id.replace(/\W/g,'_') + '__');
+                    if (el) el.textContent = '⭐ ' + (m.stars >= 1000 ? (m.stars/1000).toFixed(1)+'k' : m.stars);
+                } catch {}
+            });
+        } catch(e) {
+            MKT_DATA = [];
+        }
+        renderMarketplace();
+    }
 
     function renderMarketplace() {
         const mktList = document.getElementById('__st_mkt_list__');
@@ -1431,8 +1589,12 @@
         if (mktSort === 'trending') items.sort((a,b) => (b.trending?.weekly||0) - (a.trending?.weekly||0));
         else if (mktSort === 'stars') items.sort((a,b) => b.stars - a.stars);
         if (items.length === 0) { mktList.innerHTML = '<div class="st-empty"><span class="st-empty-ico">🔍</span>No items found</div>'; return; }
-        const previewTile = (p) => `
-            <div class="sp-prev-tile" style="--p0:${p.colors[0]};--p1:${p.colors[1]};--p2:${p.colors[2]}">
+        const previewTile = (p) => p.url
+            ? `<div class="sp-prev-tile" style="padding:0;overflow:hidden">
+                <img src="${escapeHtml(p.url)}" alt="${escapeHtml(p.title)}" style="width:100%;height:100%;object-fit:cover;border-radius:6px;display:block">
+                <div class="sp-prev-cap">${escapeHtml(p.title)}</div>
+               </div>`
+            : `<div class="sp-prev-tile" style="--p0:${p.colors[0]};--p1:${p.colors[1]};--p2:${p.colors[2]}">
                 <div class="sp-prev-art">
                     <div class="sp-prev-art-bg"></div>
                     <div class="sp-prev-art-row" style="width:60%"></div>
@@ -1441,7 +1603,7 @@
                     <div class="sp-prev-art-grid"><span></span><span></span><span></span><span></span></div>
                 </div>
                 <div class="sp-prev-cap">${escapeHtml(p.title)}</div>
-            </div>`;
+               </div>`;
         mktList.innerHTML = items.map((m, i) => {
             const installed = mktInstalled.has(m.id);
             const exp = mktExpanded === m.id;
@@ -1473,7 +1635,7 @@
                         <div class="st-card-desc">${escapeHtml(m.desc)}</div>
                         <div class="st-card-meta">
                             <button class="sp-author-chip" data-mkt-author="${escapeHtml(m.author)}"> <span>by ${escapeHtml(m.author)}</span></button>
-                            <span class="sp-stars"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.5 6 6.5.5-5 4.5L17.5 21 12 17.5 6.5 21l1.5-6.5L3 9.5 9.5 9z"/></svg>${starsStr}</span>
+                            <span class="sp-stars" id="__st_mkt_stars_${m.id.replace(/\W/g,'_')}__"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.5 6 6.5.5-5 4.5L17.5 21 12 17.5 6.5 21l1.5-6.5L3 9.5 9.5 9z"/></svg>${starsStr}</span>
                             ${velocity}
                             ${previewHint}
                         </div>
@@ -1495,20 +1657,32 @@
         });
         // Wire install
         mktList.querySelectorAll('[data-mkt-install]').forEach(btn => {
-            btn.onclick = e => {
+            btn.onclick = async e => {
                 e.stopPropagation();
                 const id = btn.dataset.mktInstall;
-                if (!mktInstalled.has(id)) {
+                if (mktInstalled.has(id)) return;
+                const m = MKT_DATA.find(x => x.id === id);
+                if (!m) return;
+                btn.textContent = 'Installing…';
+                btn.disabled = true;
+                try {
+                    await invoke('install_from_url', { url: m.download });
                     mktInstalled.add(id);
-                    const m = MKT_DATA.find(x => x.id === id);
-                    if (m) { showToast(`Installed "${m.name}"`, 'ok'); pushActivity('installed', 'Marketplace install', m.name); }
-                    renderMarketplace();
+                    showToast(`Installed "${m.name}"`, 'ok');
+                    pushActivity('installed', 'Marketplace install', m.name);
+                } catch(e) {
+                    showToast('Install failed: ' + e, 'err');
                 }
+                renderMarketplace();
             };
         });
         // Wire author chips
         mktList.querySelectorAll('[data-mkt-author]').forEach(chip => {
             chip.onclick = e => { e.stopPropagation(); openAuthorDrawer(chip.dataset.mktAuthor); };
+        });
+        // Wire image lightbox
+        mktList.querySelectorAll('.sp-prev-tile img').forEach(img => {
+            img.onclick = e => { e.stopPropagation(); openLightbox(img.src, img.alt); };
         });
     }
 
@@ -2752,20 +2926,463 @@
         setTimeout(() => onboard.classList.add('visible'), 600);
     }
     maybeShowOnboard();
-    
+
+    // ── Image lightbox ────────────────────────────────────────────────────────────
+    const lightbox = document.createElement('div');
+    lightbox.id = '__st_lightbox__';
+    lightbox.innerHTML = `<button id="__st_lightbox_close__">&#x2715;</button><img id="__st_lightbox_img__" src="" alt="">`;
+    root.appendChild(lightbox);
+    function openLightbox(src, alt) {
+        const img = document.getElementById('__st_lightbox_img__');
+        img.src = src; img.alt = alt || '';
+        lightbox.classList.add('open');
+    }
+    function closeLightbox() { lightbox.classList.remove('open'); }
+    lightbox.addEventListener('mousedown', e => { if (e.target === lightbox) closeLightbox(); });
+    document.getElementById('__st_lightbox_close__').onclick = closeLightbox;
+
+    // ── First-run Arc-style intro ─────────────────────────────────────────────────
+    const INTRO_KEY = '__st_intro_done__';
+    const introEl = document.createElement('div');
+    introEl.id = '__st_intro__';
+    introEl.innerHTML = `
+        <div class="onb-panel">
+            <div class="onb-rail" id="__st_onb_rail__"></div>
+            <div class="onb-rail-meta">
+                <span id="__st_onb_rail_label__"></span>
+                <button class="onb-rail-meta-skip" id="__st_onb_skip__">Skip setup</button>
+            </div>
+            <div class="onb-body" id="__st_onb_body__"></div>
+            <div class="onb-footer" id="__st_onb_footer__"></div>
+        </div>`;
+    document.getElementById('__st_root__').appendChild(introEl);
+
+    const GLASS_THEME_URL = 'https://raw.githubusercontent.com/Fxy6969/Stremio-Glass-Theme/refs/heads/v26/themes/liquid-glass.theme.css';
+
+    const ONB_STEPS = [
+        { id: 'welcome', label: 'Welcome', count: '00' },
+        { id: 'accent',  label: 'Accent',  count: '01' },
+        { id: 'backend', label: 'Backend', count: '02' },
+        { id: 'theme',   label: 'Theme',   count: '03' },
+        { id: 'plugins', label: 'Plugins', count: '04' },
+        { id: 'done',    label: 'Finish',  count: '05' },
+    ];
+
+    const ONB_ACCENTS = [
+        { id: 'violet', label: 'Violet', h: 270, color: 'hsl(270 75% 70%)', glow: 'hsla(270,80%,65%,0.35)', soft: 'hsla(270,75%,70%,0.14)' },
+        { id: 'cyan',   label: 'Cyan',   h: 190, color: 'hsl(190 80% 65%)', glow: 'hsla(190,85%,60%,0.35)', soft: 'hsla(190,80%,65%,0.14)' },
+        { id: 'rose',   label: 'Rose',   h: 340, color: 'hsl(340 80% 70%)', glow: 'hsla(340,85%,65%,0.35)', soft: 'hsla(340,80%,70%,0.14)' },
+        { id: 'amber',  label: 'Amber',  h: 35,  color: 'hsl(35 90% 65%)',  glow: 'hsla(30,95%,60%,0.35)',  soft: 'hsla(35,90%,65%,0.14)'  },
+        { id: 'green',  label: 'Green',  h: 150, color: 'hsl(150 65% 65%)', glow: 'hsla(150,70%,60%,0.35)', soft: 'hsla(150,65%,65%,0.14)' },
+    ];
+
+    const ONB_PLUGINS = [
+        { id: 'subtitle-styler', name: 'Subtitle Styler',      author: 'lumen',     desc: 'Custom fonts, sizes, and outlines for any source.', stars: 412,  ph: 270, on: true  },
+        { id: 'intro-skip',      name: 'Intro Skip',           author: 'lumen',     desc: 'Auto-skip recaps and credits.',                      stars: 880,  ph: 200, on: true  },
+        { id: 'trakt-sync',      name: 'Trakt Sync',           author: 'northwind', desc: 'Cross-device watch progress.',                       stars: 1284, ph: 35,  on: true  },
+        { id: 'discord-rpc',     name: 'Discord Rich Presence',author: 'rev977',    desc: "Show what you're watching on Discord.",              stars: 631,  ph: 340, on: false },
+        { id: 'auto-quality',    name: 'Auto Quality',         author: 'delta',     desc: 'Pick stream resolution by bandwidth.',               stars: 144,  ph: 150, on: false },
+    ];
+
+    let _onbStep = 0;
+    let _onbAccentId = 'violet';
+    let _onbInstall = 'idle'; // 'idle' | 'installing' | 'done'
+    let _onbInstallPct = 0;
+    let _onbPlugins = Object.fromEntries(ONB_PLUGINS.map(p => [p.id, p.on]));
+
+    function dismissIntro() {
+        introEl.classList.add('leaving');
+        setTimeout(() => { introEl.style.display = 'none'; }, 320);
+        try { localStorage.setItem(INTRO_KEY, '1'); } catch(_) {}
+        requestAnimationFrame(() => { overlay.classList.add('open'); positionTabIndicator(); });
+    }
+
+    function onbGoto(n) {
+        _onbStep = Math.max(0, Math.min(ONB_STEPS.length - 1, n));
+        renderOnbStep();
+    }
+
+    function onbSkipToEnd() {
+        _onbStep = ONB_STEPS.length - 1;
+        renderOnbStep();
+    }
+
+    function renderOnbStep() {
+        const step = ONB_STEPS[_onbStep];
+
+        // Rail
+        const rail = document.getElementById('__st_onb_rail__');
+        if (rail) rail.innerHTML = ONB_STEPS.map((s, i) =>
+            `<div class="onb-rail-dot${i < _onbStep ? ' done' : ''}${i === _onbStep ? ' active' : ''}"></div>`
+        ).join('');
+
+        // Rail meta
+        const lbl = document.getElementById('__st_onb_rail_label__');
+        if (lbl) lbl.textContent = `Step ${step.count} · ${step.label}`;
+        const skipBtn = document.getElementById('__st_onb_skip__');
+        if (skipBtn) skipBtn.style.display = (step.id === 'welcome' || step.id === 'done') ? 'none' : '';
+
+        // Body
+        const body = document.getElementById('__st_onb_body__');
+        if (body) { body.innerHTML = buildOnbBody(step.id); body.scrollTop = 0; }
+
+        // Footer
+        const footer = document.getElementById('__st_onb_footer__');
+        if (footer) footer.innerHTML = buildOnbFooter(step.id);
+
+        // Wire
+        wireOnbStep(step.id);
+    }
+
+    function buildOnbBody(stepId) {
+        if (stepId === 'welcome') {
+            return `
+                <div class="onb-hero">
+                    <div class="onb-logo">S<span class="onb-logo-plus">+</span></div>
+                    <h1 class="onb-title">Welcome to Stremio<span style="color:var(--accent)">+</span></h1>
+                    <p class="onb-subtitle">Your Stremio, supercharged with themes, plugins, and curated bundles. Set up takes about a minute.</p>
+                </div>
+                <div class="onb-feat-list">
+                    <div class="onb-feat">
+                        <div class="onb-feat-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 20a8 8 0 1 1-8-8 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0 4 4 3.5 3.5 0 0 0 0-7"/></svg></div>
+                        <div class="onb-feat-body">
+                            <div class="onb-feat-title">Themes &amp; Plugins</div>
+                            <div class="onb-feat-sub">Personalize Stremio with custom themes and powerful plugins.</div>
+                        </div>
+                    </div>
+                    <div class="onb-feat">
+                        <div class="onb-feat-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+                        <div class="onb-feat-body">
+                            <div class="onb-feat-title">Browse the Marketplace</div>
+                            <div class="onb-feat-sub">Find curated themes and plugins in the Marketplace tab.</div>
+                        </div>
+                    </div>
+                    <div class="onb-feat">
+                        <div class="onb-feat-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+                        <div class="onb-feat-body">
+                            <div class="onb-feat-title">Always at hand</div>
+                            <div class="onb-feat-sub">Press <span class="sp-kbd">&#x21E7; Space</span> anytime to open this panel.</div>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        if (stepId === 'accent') {
+            const a = ONB_ACCENTS.find(x => x.id === _onbAccentId) || ONB_ACCENTS[0];
+            const swatches = ONB_ACCENTS.map(acc => `
+                <button class="onb-accent-swatch${acc.id === _onbAccentId ? ' on' : ''}" style="--s-c:${acc.h} ${acc.color.slice(4,-1).split(' ').slice(1).join(' ')}" data-onb-accent="${acc.id}">
+                    <span class="onb-accent-swatch-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                    ${acc.label}
+                </button>`).join('');
+            return `
+                <div class="onb-step-head">
+                    <h1 class="onb-title">Pick an accent</h1>
+                    <p class="onb-subtitle">Used for highlights, focus rings, and active tabs. You can change it anytime in Settings.</p>
+                </div>
+                <div class="onb-accent-preview">
+                    <span class="onb-accent-chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 3 3.5.5-2.5 2.5.5 3.5L12 11l-3 1.5.5-3.5L7 6.5l3.5-.5z"/></svg> ${a.label} preview</span>
+                    <button class="onb-accent-btn">Apply theme</button>
+                </div>
+                <div class="onb-accent-grid">${swatches}</div>`;
+        }
+
+        if (stepId === 'backend') {
+            const be = typeof _currentBackend !== 'undefined' ? _currentBackend : 'service';
+            const servers = [
+                { id: 'service', region: 'SVC',  regionH: 270, name: 'Stremio Service',  sub: 'Default · localhost:11470 · always on', ms: 2,   required: true  },
+                { id: 'mpv',     region: 'MPV',  regionH: 190, name: 'MPV (native)',      sub: 'Hardware decode, thumbnail seek, upscale', ms: 12,  required: false },
+                { id: 'server',  region: 'JS',   regionH: 35,  name: 'server.js',          sub: 'Local stream server · high compatibility', ms: 18,  required: false },
+                { id: 'native',  region: 'VID',  regionH: 340, name: 'Native &lt;video&gt;',  sub: 'Browser built-in player · coming soon', ms: null, required: false },
+            ];
+            const rows = servers.map(s => {
+                const on = s.id === be || (s.required);
+                const bars = s.ms !== null ? (() => {
+                    const lit = s.ms < 5 ? 5 : s.ms < 20 ? 4 : s.ms < 50 ? 3 : 2;
+                    return `<span class="onb-server-pings">${Array.from({length:5},(_,i)=>`<span class="onb-server-ping${i<lit?'':' dim'}" style="height:${4+i*2}px"></span>`).join('')}</span>`;
+                })() : '';
+                const msLabel = s.ms !== null ? `<span class="onb-server-ms">${s.ms}ms</span>` : '';
+                return `
+                <div class="onb-server${on ? ' on' : ''}" style="--region-h:${s.regionH}" data-onb-be="${s.id}">
+                    <div class="onb-server-flag">${s.region}</div>
+                    <div class="onb-server-body">
+                        <div class="onb-server-name-row">
+                            <span class="onb-server-name">${s.name}</span>
+                            ${s.required ? '<span class="onb-server-pill req">Required</span>' : ''}
+                            ${s.id === 'mpv' ? '<span class="onb-server-pill">Recommended</span>' : ''}
+                        </div>
+                        <div class="onb-server-sub">${s.sub}</div>
+                    </div>
+                    ${bars}${msLabel}
+                    <button type="button" class="sp-toggle${on ? ' on' : ''}" data-onb-be-tog="${s.id}"><span class="sp-toggle-knob"></span></button>
+                </div>`;
+            }).join('');
+            return `
+                <div class="onb-step-head">
+                    <h1 class="onb-title">Streaming backend</h1>
+                    <p class="onb-subtitle">How Stremio should play content. You can switch any time in Settings.</p>
+                </div>
+                <div id="__st_onb_be__">${rows}</div>`;
+        }
+
+        if (stepId === 'theme') {
+            const pct = Math.round(_onbInstallPct * 100);
+            const installBarClass = `onb-install-bar${_onbInstall !== 'idle' ? ' ' + _onbInstall : ''}`;
+            const fillStyle = _onbInstall !== 'idle' ? `style="transform:scaleX(${_onbInstallPct})"` : '';
+            const fill = _onbInstall !== 'idle' ? `<div class="onb-install-fill" id="__st_onb_fill__" ${fillStyle}></div>` : '';
+            const label = _onbInstall === 'idle'
+                ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download &amp; install (184 KB)`
+                : _onbInstall === 'installing'
+                    ? `<span class="onb-install-spinner"></span> Installing… ${pct}%`
+                    : `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Installed &amp; applied`;
+            return `
+                <div class="onb-step-head">
+                    <h1 class="onb-title">Install the default theme</h1>
+                    <p class="onb-subtitle">Modern Glass — translucent panes with a soft ambient blur. Free, open-source, and uninstallable anytime.</p>
+                </div>
+                <div class="onb-theme-card">
+                    <div class="onb-theme-preview">
+                        <div class="onb-theme-mini">
+                            <div class="onb-theme-mini-row accent" style="width:30%"></div>
+                            <div class="onb-theme-mini-row"></div>
+                            <div class="onb-theme-mini-row short"></div>
+                            <div class="onb-theme-mini-row"></div>
+                            <div class="onb-theme-mini-row short"></div>
+                        </div>
+                    </div>
+                    <div class="onb-theme-meta">
+                        <div class="onb-theme-name">Modern Glass <span style="font-size:11px;font-family:ui-monospace,'SF Mono',Menlo,monospace;color:rgba(255,255,255,0.4);font-weight:400;margin-left:6px">v2.0.0</span></div>
+                        <div class="onb-theme-desc">Deep glass with subtle ambient inflection. Translucent panels float over your library; the chrome politely steps out of the way during playback.</div>
+                        <div class="onb-theme-specs">
+                            <div class="onb-theme-spec">By <strong>Fxy6969</strong></div>
+                            <div class="onb-theme-spec">Size <strong>184 KB</strong></div>
+                            <div class="onb-theme-spec">License <strong>MIT</strong></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="${installBarClass}" id="__st_onb_install_bar__">${fill}<span class="onb-install-label">${label}</span></div>`;
+        }
+
+        if (stepId === 'plugins') {
+            const rows = ONB_PLUGINS.map(p => `
+                <div class="onb-plug${_onbPlugins[p.id] ? ' on' : ''}" data-onb-plug="${p.id}">
+                    <div class="onb-plug-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                    <div class="onb-plug-icon" style="--ph:${p.ph}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v6m-4-2 2 2-2 2M16 6l-2 2 2 2M5 12H2l3 4H2l3 4h4l-1-4h10l-1 4h4l3-4h-3l3-4h-3"/></svg></div>
+                    <div class="onb-plug-body">
+                        <div class="onb-plug-name-row">
+                            <span class="onb-plug-name">${p.name}</span>
+                            <span class="onb-plug-by">by ${p.author}</span>
+                            ${p.on ? '<span class="onb-server-pill" style="font-size:9px">Recommended</span>' : ''}
+                        </div>
+                        <div class="onb-plug-desc">${p.desc}</div>
+                    </div>
+                    <span class="onb-plug-stars"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> ${p.stars >= 1000 ? (p.stars/1000).toFixed(1)+'k' : p.stars}</span>
+                </div>`).join('');
+            return `
+                <div class="onb-step-head">
+                    <h1 class="onb-title">Starter plugins</h1>
+                    <p class="onb-subtitle">Optional add-ons our team recommends. Each runs sandboxed and can be disabled or removed from the Plugins tab.</p>
+                </div>
+                <div id="__st_onb_plugs__">${rows}</div>`;
+        }
+
+        if (stepId === 'done') {
+            const a = ONB_ACCENTS.find(x => x.id === _onbAccentId) || ONB_ACCENTS[0];
+            const plugCount = Object.values(_onbPlugins).filter(Boolean).length;
+            const themeLabel = _onbInstall === 'done' ? 'Modern Glass' : 'Default';
+            return `
+                <div class="onb-done">
+                    <div class="onb-done-ring"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                    <h1 class="onb-title" style="text-align:center;font-size:24px">You're all set</h1>
+                    <p class="onb-subtitle" style="text-align:center">Stremio+ is configured and ready. Open the panel anytime with <span class="sp-kbd">&#x21E7; Space</span>.</p>
+                    <div class="onb-summary">
+                        <div class="onb-sum-card">
+                            <div class="onb-sum-label">Accent</div>
+                            <div class="onb-sum-value"><span class="onb-sum-dot"></span> ${a.label}</div>
+                        </div>
+                        <div class="onb-sum-card">
+                            <div class="onb-sum-label">Theme</div>
+                            <div class="onb-sum-value"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 20a8 8 0 1 1-8-8 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0 4 4 3.5 3.5 0 0 0 0-7"/></svg> ${themeLabel}</div>
+                        </div>
+                        <div class="onb-sum-card">
+                            <div class="onb-sum-label">Backend</div>
+                            <div class="onb-sum-value"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg> Active</div>
+                        </div>
+                        <div class="onb-sum-card">
+                            <div class="onb-sum-label">Plugins</div>
+                            <div class="onb-sum-value"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg> ${plugCount} queued</div>
+                        </div>
+                    </div>
+                    <div class="onb-tip">Tip: try the <span class="sp-kbd">&#x2318; K</span> command palette to jump between plugins, themes, and bundles.</div>
+                </div>`;
+        }
+        return '';
+    }
+
+    function buildOnbFooter(stepId) {
+        if (stepId === 'welcome') {
+            return `
+                <button class="onb-welcome-cta-skip" id="__st_onb_skip_all__">Skip setup</button>
+                <div class="onb-foot-spacer"></div>
+                <span class="onb-foot-hint">Press <span class="sp-kbd">&#x21E7; Space</span> anytime to reopen</span>
+                <div class="onb-foot-spacer"></div>
+                <button class="onb-cta large" id="__st_onb_start__">Get started <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>`;
+        }
+        const isLast = stepId === 'done';
+        const isTheme = stepId === 'theme';
+        const canAdvance = isTheme ? _onbInstall === 'done' : true;
+        const ctaLabel = isLast
+            ? `Open Stremio+ <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>`
+            : `Continue <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>`;
+        const hint = isLast ? '' : `<span class="onb-foot-hint"><span class="sp-kbd">&#x21B5;</span> to continue</span>`;
+        return `
+            <button class="onb-foot-back" id="__st_onb_back__"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(180deg)"><polyline points="9 18 15 12 9 6"/></svg> Back</button>
+            <div class="onb-foot-spacer"></div>
+            ${hint}
+            <button class="onb-cta${isLast ? ' large' : ''}" id="__st_onb_next__"${canAdvance ? '' : ' disabled'}>${ctaLabel}</button>`;
+    }
+
+    function wireOnbStep(stepId) {
+        // Skip button in rail meta
+        document.getElementById('__st_onb_skip__')?.addEventListener('click', onbSkipToEnd);
+
+        if (stepId === 'welcome') {
+            document.getElementById('__st_onb_start__')?.addEventListener('click', () => onbGoto(1));
+            document.getElementById('__st_onb_skip_all__')?.addEventListener('click', dismissIntro);
+        }
+
+        if (stepId === 'accent') {
+            document.getElementById('__st_onb_body__')?.addEventListener('click', e => {
+                const sw = e.target.closest('[data-onb-accent]');
+                if (!sw) return;
+                _onbAccentId = sw.dataset.onbAccent;
+                const a = ONB_ACCENTS.find(x => x.id === _onbAccentId) || ONB_ACCENTS[0];
+                applyAccent(a.color, a.glow);
+                document.querySelectorAll('[data-onb-accent]').forEach(el => el.classList.toggle('on', el.dataset.onbAccent === _onbAccentId));
+                const chip = document.querySelector('.onb-accent-chip');
+                if (chip) chip.lastChild.textContent = ` ${a.label} preview`;
+            });
+        }
+
+        if (stepId === 'backend') {
+            document.getElementById('__st_onb_be__')?.addEventListener('click', async e => {
+                const row = e.target.closest('[data-onb-be]');
+                if (!row) return;
+                const be = row.dataset.onbBe;
+                if (be === 'native') { showToast('Native <video> — coming soon', 'err'); return; }
+                try {
+                    await invoke('set_playback_backend', { backend: be });
+                    _currentBackend = be;
+                    refreshBackendCards();
+                } catch(_) {}
+                // Update toggle visual state
+                document.querySelectorAll('[data-onb-be]').forEach(r => {
+                    const tog = r.querySelector('[data-onb-be-tog]');
+                    const isSvc = r.dataset.onbBe === 'service';
+                    const isActive = r.dataset.onbBe === be || isSvc;
+                    r.classList.toggle('on', isActive);
+                    if (tog) tog.classList.toggle('on', isActive);
+                });
+            });
+        }
+
+        if (stepId === 'theme') {
+            document.getElementById('__st_onb_install_bar__')?.addEventListener('click', () => {
+                if (_onbInstall !== 'idle') return;
+                _onbInstall = 'installing';
+                _onbInstallPct = 0;
+                const body = document.getElementById('__st_onb_body__');
+                if (body) body.innerHTML = buildOnbBody('theme');
+                wireOnbStep('theme'); // re-wire after re-render
+
+                const startTime = Date.now();
+                const dur = 2200;
+                const fill = document.getElementById('__st_onb_fill__');
+                const tick = () => {
+                    const elapsed = Date.now() - startTime;
+                    const pct = Math.min(1, elapsed / dur);
+                    _onbInstallPct = 1 - Math.pow(1 - pct, 2.6);
+                    if (fill) fill.style.transform = `scaleX(${_onbInstallPct})`;
+                    // Update label text
+                    const lbl = document.querySelector('#__st_onb_install_bar__ .onb-install-label');
+                    if (lbl) lbl.innerHTML = `<span class="onb-install-spinner"></span> Installing… ${Math.round(_onbInstallPct * 100)}%`;
+                    if (pct < 1) {
+                        requestAnimationFrame(tick);
+                    } else {
+                        _onbInstall = 'done';
+                        const bar = document.getElementById('__st_onb_install_bar__');
+                        if (bar) { bar.classList.remove('installing'); bar.classList.add('done'); }
+                        if (lbl) lbl.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Installed &amp; applied`;
+                        // Enable the Continue button
+                        const nextBtn = document.getElementById('__st_onb_next__');
+                        if (nextBtn) nextBtn.removeAttribute('disabled');
+                        // Actually install
+                        invoke('install_from_url', { url: GLASS_THEME_URL })
+                            .then(() => { pushActivity('installed', 'Setup wizard installed Modern Glass theme', ''); loadPlugins(); })
+                            .catch(err => showToast('Theme install: ' + err, 'err'));
+                    }
+                };
+                requestAnimationFrame(tick);
+            });
+        }
+
+        if (stepId === 'plugins') {
+            document.getElementById('__st_onb_plugs__')?.addEventListener('click', e => {
+                const row = e.target.closest('[data-onb-plug]');
+                if (!row) return;
+                const id = row.dataset.onbPlug;
+                _onbPlugins[id] = !_onbPlugins[id];
+                row.classList.toggle('on', _onbPlugins[id]);
+            });
+        }
+
+        // Footer nav buttons (present on all steps except welcome)
+        const backBtn = document.getElementById('__st_onb_back__');
+        const nextBtn = document.getElementById('__st_onb_next__');
+        if (backBtn) backBtn.addEventListener('click', () => onbGoto(_onbStep - 1));
+        if (nextBtn) nextBtn.addEventListener('click', () => {
+            if (stepId === 'done') { dismissIntro(); return; }
+            onbGoto(_onbStep + 1);
+        });
+
+        // Enter key to advance (not on welcome or done)
+        if (stepId !== 'welcome' && stepId !== 'done' && stepId !== 'theme') {
+            introEl._onbKeyHandler = (e) => {
+                if (e.key === 'Enter' && document.activeElement?.closest('#__st_intro__')) {
+                    e.preventDefault();
+                    onbGoto(_onbStep + 1);
+                }
+            };
+            document.addEventListener('keydown', introEl._onbKeyHandler);
+        }
+    }
+
+    function maybeShowIntro() {
+        try { if (localStorage.getItem(INTRO_KEY)) return; } catch(_) {}
+        // Initialize with saved accent if any
+        const savedColor = localStorage.getItem(ACCENT_KEY);
+        if (savedColor) {
+            const match = ONB_ACCENTS.find(a => a.color === savedColor);
+            if (match) _onbAccentId = match.id;
+        }
+        _onbStep = 0;
+        renderOnbStep();
+        requestAnimationFrame(() => introEl.classList.add('visible'));
+    }
+
     // ── Panel open/close ──────────────────────────────────────────────────────────
     let isOpen=false;
     let _hintPulsed=false;
     function openPanel(){
         isOpen=true;
         dismissOnboard();
+        maybeShowIntro();
         setPageBlur(true);
         // Re-apply saved tab visibility (in case DOM was recreated)
         const actBtn = overlay.querySelector('.st-tab[data-tab="activity"]');
         if (actBtn) actBtn.classList.toggle('st-tab-hidden', localStorage.getItem('__st_show_activity__') === 'off');
         requestAnimationFrame(()=>{
             requestAnimationFrame(()=>{
-                overlay.classList.add('open');
+                if (!introEl.classList.contains('visible')) overlay.classList.add('open');
                 positionTabIndicator();
 
             });
@@ -2792,6 +3409,11 @@
     function closePanel(){
         isOpen=false;
         setPageBlur(false);
+        if (introEl.classList.contains('visible')) {
+            introEl.classList.remove('visible');
+            introEl.classList.add('leaving');
+            setTimeout(() => { introEl.style.display = 'none'; }, 320);
+        }
         overlay.classList.add('closing');
         if (ghostEl) { ghostEl.textContent = ''; ghostEl.dataset.suffix = ''; }
         if (sugEl) sugEl.style.display = 'none';
@@ -2827,6 +3449,7 @@
             return;
         }
         if(e.code==='ShiftRight'&&!e.repeat){e.preventDefault();isOpen?closePanel():openPanel();return;}
+        if(e.key==='Escape'&&lightbox.classList.contains('open')){closeLightbox();return;}
         if(e.key==='Escape'&&isOpen){closePanel();return;}
         // ── Arrow key navigation through plugin list ──────────────────────────────
         if (isOpen && (e.key === 'ArrowDown' || e.key === 'ArrowUp') && document.activeElement === searchEl) {
@@ -3181,7 +3804,7 @@
                 devWrap.classList.add('active');
             } else if (currentTab === 'marketplace') {
                 mktWrap.classList.add('active');
-                renderMarketplace();
+                loadMarketplace();
             } else if (currentTab === 'about') {
                 abWrap.classList.add('active');
                 loadAboutTab();
@@ -3503,6 +4126,31 @@
             ]
         }, 'err', { duration: 8000 });
         pushActivity('warn', 'Simulated crash', `${report.plugins.length} active plugins`);
+    };
+
+    // ── Clear saved data ──────────────────────────────────────────────────────────
+    document.getElementById('__st_clearcache_btn__').onclick = () => {
+        showToast({
+            title:  'Clear all saved data?',
+            detail: 'This resets all Enhanced+ preferences, plugin notes, accent colours, custom CSS, and performance metrics. A reload is required.',
+            actions: [
+                {
+                    label: 'Clear & reload',
+                    primary: true,
+                    fn: () => {
+                        const toRemove = [];
+                        for (let i = 0; i < localStorage.length; i++) {
+                            const k = localStorage.key(i);
+                            if (k && (k.startsWith('__st_') || k.startsWith('sxp_'))) toRemove.push(k);
+                        }
+                        toRemove.forEach(k => localStorage.removeItem(k));
+                        pushActivity('warn', 'Saved data cleared', `${toRemove.length} keys removed`);
+                        setTimeout(() => location.reload(), 600);
+                    }
+                },
+                { label: 'Cancel', fn: () => {} }
+            ]
+        }, 'err', { duration: 8000 });
     };
 
     // ── Plugin wizard ─────────────────────────────────────────────────────────────
