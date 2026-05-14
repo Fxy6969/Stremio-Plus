@@ -1,0 +1,11 @@
+node_modules
+dist
+stremio-enhanced-win32-x64
+release-builds
+package-lock.json
+.vscode
+backup
+wiki.md
+CLAUDE.md
+.DS_Store
+.claude/

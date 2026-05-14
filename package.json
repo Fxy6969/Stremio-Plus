@@ -1,0 +1,87 @@
+{
+	"name": "stremio-plus",
+	"version": "1.1.5",
+	"description": "Electron-based Stremio client with plugins, themes, and enhanced features.",
+	"main": "./dist/main.js",
+	"scripts": {
+		"dist": "tsc && node ./copyComponents.js",
+		"watch": "tsc -w",
+		"lint": "eslint -c .eslintrc --ext .ts ./src",
+		"dev": "node -e \"console.clear()\" && npm run dist && npx electron --log-level=3 ./dist/main.js --devtools",
+		"build": "npm run dist && electron-builder",
+		"build:linux:x64": "npm run dist && electron-builder --linux --x64",
+		"build:linux:arm64": "npm run dist && electron-builder --linux --arm64",
+		"build:mac:x64": "npm run dist && electron-builder --mac --x64",
+		"build:mac:arm64": "npm run dist && electron-builder --mac --arm64",
+		"build:win:x64": "npm run dist && electron-builder --win --x64",
+		"build:win:arm64": "npm run dist && electron-builder --win --arm64",
+		"build:win": "npm run dist && electron-builder --win"
+	},
+	"repository": "https://github.com/Fxy6969/stremio-plus.git",
+	"publish": {
+		"provider": "github",
+		"releaseType": "release"
+	},
+	"author": "Fxy6969",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/unzipper": "^0.10.11",
+		"electron": "^41.1.0",
+		"electron-builder": "^26.4.0",
+		"typescript": "^5.7.2"
+	},
+	"dependencies": {
+		"@xhayper/discord-rpc": "^1.2.1",
+		"discord-api-types": "^0.37.119",
+		"marked": "^15.0.7",
+		"p-limit": "^7.2.0",
+		"unzipper": "^0.12.3",
+		"winston": "^3.11.0"
+	},
+	"optionalDependencies": {
+		"dmg-license": "^1.0.11"
+	},
+	"files": [
+		"static/**/*",
+		"!**/node_modules/*",
+		"!**/dist/*",
+		"!**/src/*",
+		"index.html"
+	],
+	"build": {
+		"appId": "com.fxy6969.stremio-plus",
+		"productName": "Stremio Plus",
+		"asar": true,
+		"icon": "images/icon",
+		"directories": {
+			"output": "release-builds"
+		},
+		"publish": {
+			"provider": "github",
+			"owner": "Fxy6969",
+			"repo": "stremio-plus"
+		},
+		"asarUnpack": [
+			"**/register-scheme/build/Release/*.node",
+			"**/register-scheme/node-addon-api/src/node-api.target.mk"
+		],
+		"win": {
+			"target": [
+				{
+					"target": "nsis"
+				},
+				{
+					"target": "portable"
+				}
+			]
+		},
+		"mac": {
+			"target": "dmg",
+			"icon": "images/icon.icns"
+		},
+		"linux": {
+			"target": "AppImage",
+			"icon": "images/icon.png"
+		}
+	}
+}

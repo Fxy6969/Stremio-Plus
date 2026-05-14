@@ -1,0 +1,253 @@
+/**
+ * @name StremioPlus
+ * @description Deep-glass dark theme. Violet accent, layered radial gradients, film grain, frosted modals. Matches the StremioPlus panel aesthetic.
+ * @version 1.0.0
+ * @author StremioPlus
+ */
+
+/* ─── Color tokens ─── */
+:root {
+    --primary-background-color:   #06040c;
+    --secondary-background-color: #0a0812;
+    --modal-background-color:     #0e0c14;
+
+    --primary-foreground-color:   rgba(255, 255, 255, 0.92);
+    --secondary-foreground-color: rgba(255, 255, 255, 0.55);
+    --tertiary-foreground-color:  rgba(255, 255, 255, 0.35);
+
+    --accent-color:        hsl(270, 75%, 70%);
+    --accent-contrast-color: #15101a;
+
+    --border-color:        rgba(255, 255, 255, 0.07);
+    --overlay-color:       rgba(0, 0, 0, 0.65);
+
+    --sp-accent:      hsl(270 75% 70%);
+    --sp-accent-glow: hsla(270, 80%, 65%, 0.35);
+    --sp-accent-soft: hsla(270, 75%, 70%, 0.12);
+}
+
+/* ─── Global body / app root ─── */
+body {
+    background: #06040c;
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "SF Pro Text", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Deep-space gradient backdrop */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(1200px 800px at 18% 12%, hsla(270, 60%, 28%, 0.45), transparent 60%),
+        radial-gradient(900px 700px at 88% 92%,  hsla(220, 70%, 22%, 0.4),  transparent 55%),
+        radial-gradient(700px 600px at 65% 15%,  hsla(330, 55%, 25%, 0.28), transparent 55%);
+}
+
+/* Film grain overlay */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.07 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: overlay;
+    opacity: 0.45;
+}
+
+/* ─── Scrollbars ─── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.18); }
+
+/* ─── Navigation / header glass pill ─── */
+/* Main nav bar */
+[class*="nav-bar"], [class*="navigation-bar"], [class*="top-bar"], [class*="header-container"] {
+    background: linear-gradient(180deg, rgba(6, 4, 12, 0.85) 0%, rgba(6, 4, 12, 0) 100%) !important;
+    backdrop-filter: blur(12px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(160%) !important;
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Nav links / tabs */
+[class*="nav-tab"], [class*="menu-item"], [class*="catalog-tab"] {
+    color: rgba(255, 255, 255, 0.45) !important;
+    transition: color 0.18s !important;
+}
+[class*="nav-tab"]:hover, [class*="menu-item"]:hover, [class*="catalog-tab"]:hover {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+[class*="nav-tab"][class*="active"], [class*="menu-item"][class*="active"], [class*="catalog-tab"][class*="active"] {
+    color: rgba(255, 255, 255, 0.96) !important;
+}
+
+/* ─── Cards / poster items ─── */
+[class*="meta-item"], [class*="item-container"], [class*="catalog-item"] {
+    border-radius: 10px !important;
+    transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s !important;
+}
+[class*="meta-item"]:hover, [class*="item-container"]:hover, [class*="catalog-item"]:hover {
+    transform: scale(1.03) translateY(-2px) !important;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Poster images */
+[class*="poster-image"], [class*="poster-container"] {
+    border-radius: 8px !important;
+    overflow: hidden !important;
+}
+
+/* Progress bar on posters */
+[class*="progress-bar"], [class*="watch-progress"] {
+    background: var(--sp-accent) !important;
+    box-shadow: 0 0 8px var(--sp-accent-glow) !important;
+    border-radius: 2px !important;
+}
+
+/* ─── Modals / dialogs — frosted glass ─── */
+[class*="modal-dialog"], [class*="modal-container"], [class*="overlay-container"],
+[class*="context-menu"], [class*="popup-container"] {
+    background: rgba(14, 12, 20, 0.88) !important;
+    backdrop-filter: blur(40px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
+    border: 0.5px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 16px !important;
+    box-shadow:
+        0 0 0 0.5px rgba(255, 255, 255, 0.06) inset,
+        0 1px 0 rgba(255, 255, 255, 0.08) inset,
+        0 30px 80px rgba(0, 0, 0, 0.65),
+        0 0 60px var(--sp-accent-glow) !important;
+}
+
+/* ─── Buttons ─── */
+/* Primary / accent button */
+[class*="button"][class*="action"], [class*="button"][class*="primary"],
+[class*="button-action"], [class*="play-button"] {
+    background: var(--sp-accent) !important;
+    border-color: transparent !important;
+    color: #15101a !important;
+    font-weight: 600 !important;
+    box-shadow: 0 0 20px var(--sp-accent-glow) !important;
+    border-radius: 999px !important;
+}
+[class*="button"][class*="action"]:hover, [class*="button"][class*="primary"]:hover,
+[class*="play-button"]:hover {
+    filter: brightness(1.1) !important;
+}
+
+/* Generic ghost buttons */
+[class*="button"]:not([class*="action"]):not([class*="primary"]) {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 0.5px solid rgba(255, 255, 255, 0.1) !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    border-radius: 999px !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+}
+[class*="button"]:not([class*="action"]):not([class*="primary"]):hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+/* ─── Search bar ─── */
+[class*="search-bar"], [class*="search-input"], #global-search-field {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 0.5px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 10px !important;
+    color: rgba(255, 255, 255, 0.92) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    caret-color: var(--sp-accent) !important;
+}
+[class*="search-bar"]:focus, [class*="search-input"]:focus, #global-search-field:focus {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 0 0 3px var(--sp-accent-soft) !important;
+    outline: none !important;
+}
+
+/* ─── Player controls ─── */
+[class*="player-controls"], [class*="controls-container"] {
+    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.8) 100%) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+}
+
+/* Transport bar items */
+[class*="control-button"], [class*="player-button"] {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 0.5px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 8px !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    transition: background 0.18s !important;
+}
+[class*="control-button"]:hover, [class*="player-button"]:hover {
+    background: rgba(255, 255, 255, 0.14) !important;
+}
+
+/* Seek / progress bar */
+[class*="seek-bar"], [class*="progress-bar-container"] {
+    height: 3px !important;
+    border-radius: 2px !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+}
+[class*="seek-bar"] [class*="fill"], [class*="seek-bar"] [class*="played"] {
+    background: var(--sp-accent) !important;
+    box-shadow: 0 0 8px var(--sp-accent-glow) !important;
+}
+[class*="seek-bar"] [class*="thumb"], [class*="seek-bar"] [class*="handle"] {
+    background: #fff !important;
+    box-shadow: 0 0 0 3px var(--sp-accent-soft) !important;
+}
+
+/* ─── Sidebar / left rail ─── */
+[class*="side-bar"], [class*="sidebar"], [class*="left-nav"] {
+    background: rgba(6, 4, 12, 0.75) !important;
+    backdrop-filter: blur(16px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(150%) !important;
+    border-right: 0.5px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* ─── Notification / toast ─── */
+[class*="notification"], [class*="toast"] {
+    background: rgba(20, 18, 26, 0.92) !important;
+    backdrop-filter: blur(30px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
+    border: 0.5px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset, 0 12px 32px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* ─── Inputs / selects ─── */
+input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
+select, textarea {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 0.5px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 8px !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    transition: border-color 0.18s, box-shadow 0.18s !important;
+}
+input:focus, select:focus, textarea:focus {
+    border-color: rgba(255, 255, 255, 0.22) !important;
+    box-shadow: 0 0 0 3px var(--sp-accent-soft) !important;
+    outline: none !important;
+}
+
+/* Range inputs */
+input[type="range"] { accent-color: var(--sp-accent) !important; }
+
+/* Checkboxes / radios */
+input[type="checkbox"]:checked, input[type="radio"]:checked {
+    accent-color: var(--sp-accent) !important;
+}
+
+/* ─── Typography ─── */
+h1, h2, h3, h4 { letter-spacing: -0.02em; }
+
+/* ─── Transitions ─── */
+* { transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }

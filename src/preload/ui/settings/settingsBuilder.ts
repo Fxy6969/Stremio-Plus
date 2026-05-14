@@ -1,0 +1,203 @@
+import Helpers from "../../../utils/Helpers";
+import { MetaData } from "../../../interfaces/MetaData";
+import { getPluginItemTemplate } from "../../../ui/components/plugin-item/pluginItem";
+import { getThemeItemTemplate } from "../../../ui/components/theme-item/themeItem";
+import { getEnhancedNav } from "../../../ui/components/enhanced-nav/enhancedNav";
+import { getLogger } from "../../../utils/logger";
+import { SELECTORS, CLASSES, STORAGE_KEYS, FILE_EXTENSIONS } from "../../../constants";
+import { settingsAPI } from "../../api/settings";
+import { modController } from "../mod/modController";
+
+const logger = getLogger("SettingsBuilder");
+
+export const settingsBuilder = {
+    /**
+     * Add a new section to the settings panel
+     */
+    addSection: (sectionId: string, title: string): void => {
+        Helpers.waitForElm(SELECTORS.SECTIONS_CONTAINER).then(() => {
+            logger.info(`Adding section: ${sectionId} with title: ${title}`);
+            
+            const settingsPanel = document.querySelector(SELECTORS.SECTIONS_CONTAINER);
+            if (!settingsPanel) return;
+
+            const sectionElement = document.querySelector(SELECTORS.SECTION);
+            const labelElement = document.querySelector(SELECTORS.LABEL);
+            
+            if (!sectionElement || !labelElement) return;
+
+            const sectionContainer = document.createElement("div");
+            sectionContainer.className = sectionElement.className;
+            sectionContainer.id = sectionId;
+
+            const sectionTitle = document.createElement("div");
+            sectionTitle.className = labelElement.className;
+            sectionTitle.textContent = title;
+
+            sectionContainer.appendChild(sectionTitle);
+            settingsPanel.appendChild(sectionContainer);
+
+            // Add section to nav
+            Helpers.waitForElm(SELECTORS.NAV_MENU).then(() => {
+                const nav = document.querySelector(SELECTORS.NAV_MENU);
+                const shortcutsNav = document.querySelector('[title="Shortcuts"]');
+
+                if (!nav || !shortcutsNav) return;
+                if(document.querySelector(`[data-section="${sectionId}"]`)) return; 
+
+                const enhancedNavContainer = document.createElement("div");
+                enhancedNavContainer.innerHTML = getEnhancedNav();
+                
+                nav.insertBefore(enhancedNavContainer, shortcutsNav.nextSibling);
+            }).catch(err => logger.error(`Failed to add nav: ${err}`));
+        }).catch(err => logger.error(`Failed to add section: ${err}`));
+    },
+
+    /**
+     * Add a category within a section
+     */
+    addCategory: (title: string, sectionId: string, icon: string): void => {
+        Helpers.waitForElm(SELECTORS.SECTIONS_CONTAINER).then(() => {
+            logger.info(`Adding category: ${title} to section: ${sectionId}`);
+            
+            const categoryElement = document.querySelector(SELECTORS.CATEGORY);
+            const categoryTitleElement = document.querySelector(SELECTORS.CATEGORY_LABEL);
+            let categoryIconElement = document.querySelector(SELECTORS.CATEGORY_ICON);
+
+            if (!categoryElement || !categoryTitleElement) return;
+
+            let categoryIconClass = '';
+            if (categoryIconElement instanceof SVGElement) {
+                categoryIconClass = categoryIconElement.className.baseVal;
+            } else if (categoryIconElement) {
+                categoryIconClass = categoryIconElement.className;
+            }
+            
+            icon = icon.replace(`class="icon"`, `class="${categoryIconClass}"`);
+
+            const section = document.getElementById(sectionId);
+            if (!section) return;
+
+            const categoryDiv = document.createElement("div");
+            categoryDiv.className = categoryElement.className;
+            
+            const titleDiv = document.createElement("div");
+            titleDiv.className = categoryTitleElement.className;
+            titleDiv.innerHTML = title;
+
+            const headingDiv = document.createElement("div");
+            headingDiv.classList.add(SELECTORS.CATEGORY_HEADING.replace('.', ''));
+            headingDiv.innerHTML += icon;
+            headingDiv.appendChild(titleDiv);
+            
+            categoryDiv.appendChild(headingDiv);
+            section.appendChild(categoryDiv);
+        }).catch(err => logger.error(`Failed to add category: ${err}`));
+    },
+
+    /**
+     * Add a button to the settings
+     */
+    addButton: (title: string, id: string, query: string): void => {
+        Helpers.waitForElm(query).then(() => {
+            const element = document.querySelector(query);
+            if (!element) return;
+
+            const optionDiv = document.createElement("div");
+            optionDiv.classList.add(CLASSES.OPTION);
+
+            const contentDiv = document.createElement("div");
+            contentDiv.classList.add(CLASSES.CONTENT);
+
+            const buttonDiv = document.createElement("div");
+            buttonDiv.setAttribute("tabindex", "0");
+            buttonDiv.setAttribute("title", title);
+            buttonDiv.classList.add(CLASSES.BUTTON, CLASSES.BUTTON_CONTAINER, "button");
+            buttonDiv.id = id;
+            buttonDiv.textContent = title;
+
+            contentDiv.appendChild(buttonDiv);
+            optionDiv.appendChild(contentDiv);
+            element.appendChild(optionDiv);
+        }).catch(err => logger.error(`Failed to add button: ${err}`));
+    },
+
+    /**
+     * Add a theme or plugin item to the settings
+     */
+    addItem: (type: "theme" | "plugin", fileName: string, metaData: MetaData): void => {
+        logger.info(`Adding ${type}: ${fileName}`);
+        
+        if (type === "theme") {
+            Helpers.waitForElm(SELECTORS.THEMES_CATEGORY).then(() => {
+                settingsBuilder._addTheme(fileName, metaData);
+            }).catch(err => logger.error(`Failed to add theme: ${err}`));
+        } else if (type === "plugin") {
+            Helpers.waitForElm(SELECTORS.PLUGINS_CATEGORY).then(() => {
+                settingsBuilder._addPlugin(fileName, metaData);
+            }).catch(err => logger.error(`Failed to add plugin: ${err}`));
+        }        
+    },
+
+    /**
+     * Remove an item from the settings
+     */
+    removeItem: (fileName: string): void => {
+        const element = document.getElementsByName(`${fileName}-box`)[0];
+        element?.remove();
+    },
+
+    /**
+     * Set a navigation element as active
+     */
+    activeSection: (element: Element): void => {
+        for (let i = 0; i < 6; i++) {
+            const navItem = document.querySelector(`${SELECTORS.NAV_MENU} > div:nth-child(${i})`);
+            navItem?.classList.remove(CLASSES.SELECTED);
+        }
+        element.classList.add(CLASSES.SELECTED);
+    },
+    
+    _addPlugin: async (fileName: string, metaData: MetaData): Promise<void> => {
+        const enabledPlugins: string[] = JSON.parse(
+            localStorage.getItem(STORAGE_KEYS.ENABLED_PLUGINS) || "[]"
+        );
+
+        const pluginContainer = document.createElement("div");
+        pluginContainer.innerHTML = getPluginItemTemplate(fileName, metaData, enabledPlugins.includes(fileName));
+        pluginContainer.setAttribute("name", `${fileName}-box`);
+
+        document.querySelector(SELECTORS.PLUGINS_CATEGORY)?.appendChild(pluginContainer);
+
+        if(await settingsAPI.getRegisteredSettings(fileName.split(FILE_EXTENSIONS.PLUGIN)[0]) != null) {
+            let optionBtn = document.getElementById(`${fileName}-settings`);
+            if(optionBtn) optionBtn.style.display = "flex";
+        }
+        
+        modController.checkForItemUpdatesUI(fileName);
+
+        if (metaData.github) {
+            fetch(`https://api.github.com/repos/${metaData.github}`)
+                .then(r => r.json())
+                .then((data: { stargazers_count?: number }) => {
+                    if (typeof data.stargazers_count === 'number') {
+                        const el = document.getElementById(`${fileName}-stars`);
+                        if (el) el.textContent = `☆ ${data.stargazers_count.toLocaleString()}`;
+                    }
+                })
+                .catch(() => {});
+        }
+    },
+
+    _addTheme: (fileName: string, metaData: MetaData): void => {
+        const currentTheme = localStorage.getItem(STORAGE_KEYS.CURRENT_THEME);
+
+        const themeContainer = document.createElement("div");
+        themeContainer.innerHTML = getThemeItemTemplate(fileName, metaData, currentTheme === fileName);
+        themeContainer.setAttribute("name", `${fileName}-box`);
+
+        document.querySelector(SELECTORS.THEMES_CATEGORY)?.appendChild(themeContainer);
+        
+        modController.checkForItemUpdatesUI(fileName);
+    }
+};
