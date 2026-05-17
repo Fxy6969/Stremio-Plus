@@ -5,6 +5,7 @@
 [![GitHub downloads](https://img.shields.io/github/downloads/Fxy6969/stremio-plus/total?style=flat&logo=github&label=Downloads)](https://github.com/Fxy6969/stremio-plus/releases/latest)
 [![Discord](https://img.shields.io/badge/Discord-5865F2?style=flat&logo=discord&logoColor=white)](https://discord.gg/jRBkd47x9E)
 [![Reddit](https://img.shields.io/reddit/subreddit-subscribers/StremioMods?style=social&logo=reddit&label=r/StremioMods)](https://www.reddit.com/r/StremioMods/)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/B0B41ZQZ7T)
 
 ![Preview](images/preview.gif)
 
