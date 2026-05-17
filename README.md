@@ -1,12 +1,15 @@
 # Stremio Plus
+
 [![GitHub stars](https://img.shields.io/github/stars/Fxy6969/stremio-plus?style=social)](https://github.com/Fxy6969/stremio-plus/stargazers)
 [![GitHub release](https://img.shields.io/github/v/release/Fxy6969/stremio-plus?style=flat&logo=github)](https://github.com/Fxy6969/stremio-plus/releases/latest)
 [![GitHub downloads](https://img.shields.io/github/downloads/Fxy6969/stremio-plus/total?style=flat&logo=github&label=Downloads)](https://github.com/Fxy6969/stremio-plus/releases/latest)
 [![Discord](https://img.shields.io/badge/Discord-5865F2?style=flat&logo=discord&logoColor=white)](https://discord.gg/jRBkd47x9E)
 [![Reddit](https://img.shields.io/reddit/subreddit-subscribers/StremioMods?style=social&logo=reddit&label=r/StremioMods)](https://www.reddit.com/r/StremioMods/)
 
+![Preview](images/preview.gif)
+
 **Stremio Plus** is a feature-rich Electron desktop client for Stremio.  
-It wraps [Stremio Web](https://web.stremio.com/) with plugin and theme support, Discord Rich Presence, external player routing, and more.
+It wraps [Stremio Web](https://web.stremio.com/) with a full plugin and theme system, Discord Rich Presence, external player routing, and more — all from a native desktop app.
 
 > Forked from [stremio-enhanced-community](https://github.com/REVENGE977/stremio-enhanced-community) by REVENGE977. **Not affiliated with Stremio.**
 
@@ -14,32 +17,62 @@ It wraps [Stremio Web](https://web.stremio.com/) with plugin and theme support, 
 
 ## ✨ Features
 
-### 🎨 Themes & Plugins
-- **CSS Themes** – Swap out Stremio's look entirely with `.theme.css` files
-- **JavaScript Plugins** – Inject new features and behaviours with `.plugin.js` files
-- **Plugin Settings UI** – Plugins can register their own settings panel for users to configure
-- **Required Plugin declarations** – Themes can declare plugins they depend on; the app will prompt the user to install them first
-- **Community Marketplace** – Browse and install community-submitted themes and plugins directly from inside the app
+### 🎨 Themes
+
+Swap out Stremio's entire look with `.theme.css` files. Themes use a userscript-style header block to declare their name, version, author, and any plugins they depend on. When you apply a theme that requires a plugin you haven't installed yet, Stremio Plus will prompt you to install it first.
+
+- Drop a `.theme.css` into your themes folder and it shows up in settings instantly
+- One click to apply or revert to default
+- Themes can declare `@require` dependencies on plugins
+- Community-submitted themes are available through the Marketplace
+
+### 🔌 Plugins
+
+Extend Stremio with JavaScript plugins (`.plugin.js` files). Each plugin runs in its own isolated scope and communicates with the app through the `StremioEnhancedAPI`. Plugins are loaded in dependency order — if plugin B requires plugin A, A is always initialized first.
+
+- Toggle plugins on/off from settings without restarting
+- Plugins can register their own settings panel with toggles, inputs, selects, and more
+- Per-plugin crash tracking and cold-start timing shown in the settings UI
+- Plugins declare `@permission` tags for transparency about what they access
+- See the [Plugin API wiki](docs/plugin-api.md) for the full developer reference
+
+### 🛍️ Community Marketplace
+
+Browse and install community-submitted themes and plugins directly from inside the app — no manual file management needed.
 
 ![Marketplace](images/marketplace_loop.gif)
 
-### 🔧 Enhancements
+- One-click install from the registry
+- Update notifications shown per-item when a new version is available
+- Registry-unverified updates are flagged with a warning before applying
+- Install from any direct URL with `stremio-plus://install?url=...`
+
+### 🔧 Built-in Enhancements
+
 | Feature | Description |
 |---|---|
-| **Discord Rich Presence** | Shows what you're watching on Discord — toggleable from settings |
-| **External Player** | Route streams to VLC or MPV instead of the built-in player |
-| **`stremio://` protocol** | Install addons directly from links without copy-pasting URLs |
-| **Embedded subtitle fix** | Injects embedded subs manually when the native implementation fails |
-| **Audio track fallback** | Adds audio tracks when the native Stremio Web implementation fails |
-| **ANGLE renderer picker** | Choose DirectX 11/9, OpenGL, Vulkan, or Software on Windows/Linux |
-| **Window transparency** | Enables transparent-background themes via Electron's transparent window flag |
-| **Auto-updater** | Checks for new releases and downloads/installs updates automatically |
+| **Discord Rich Presence** | Shows what you're watching on Discord with title, episode, and progress — toggleable from settings |
+| **External Player** | Route streams to VLC or MPV instead of the built-in player, with configurable GLSL upscale shaders and extra MPV flags |
+| **`stremio://` protocol** | Install addons directly from links without copy-pasting manifest URLs |
+| **Embedded subtitle fix** | Manually injects embedded subtitles when the native Stremio Web implementation fails to load them |
+| **Audio track fallback** | Adds audio track selection when the native implementation doesn't surface the available tracks |
+| **ANGLE renderer picker** | Choose between DirectX 11/9, OpenGL, Vulkan, or Software rendering on Windows and Linux |
+| **Window transparency** | Enables transparent-background themes by running Electron in transparent window mode |
+| **Auto-updater** | Checks for new Stremio Plus releases on startup and downloads/installs updates automatically |
 
 ---
 
 ## 📷 Gallery
 
-<video src="https://raw.githubusercontent.com/Fxy6969/Stremio-Plus/main/images/preview.mp4" controls width="100%"></video>
+### Modern Glass Theme
+
+| Main Page | Titles |
+|---|---|
+| ![Main Page](images/modern-glass/MainPage.png) | ![Titles](images/modern-glass/Titles.png) |
+
+| Video Player | Settings |
+|---|---|
+| ![Video Player](images/modern-glass/VideoPlayer.png) | ![Settings](images/settings_screenshot.png) |
 
 ---
 
@@ -76,35 +109,49 @@ npm install
 
 ## 🎨 Installing Themes
 
-1. Settings → scroll down → **Open Themes Folder**
-2. Drop your `.theme.css` file in
-3. Restart Stremio Plus
-4. The theme appears in settings — click to apply
+1. Open **Settings** → scroll down to the Enhanced section → click **Open Themes Folder**
+2. Drop your `.theme.css` file into that folder
+3. The theme appears in settings immediately — click it to apply
+4. To go back to the default look, select **Default** from the theme list
 
 ---
 
 ## 🔌 Installing Plugins
 
-1. Settings → scroll down → **Open Plugins Folder**
-2. Drop your `.plugin.js` file in
-3. Restart or reload with <kbd>Ctrl</kbd>+<kbd>R</kbd>
-4. The plugin appears in settings — toggle to enable
+1. Open **Settings** → scroll down → click **Open Plugins Folder**
+2. Drop your `.plugin.js` file into that folder
+3. The plugin appears in settings — toggle it on to enable it
+4. If the plugin registers a settings panel, a settings button appears on its card
+5. To disable a plugin, toggle it off — a page reload is required to fully unload it (<kbd>Ctrl</kbd>+<kbd>R</kbd>)
 
 ---
 
 ## 🛠️ Plugin API
 
-Plugins have access to `window.StremioEnhancedAPI`:
+Plugins are plain JavaScript files with a userscript-style header. Inside the plugin, `StremioEnhancedAPI` is available globally:
 
-| Method | Description |
-|---|---|
-| `registerSettings(schema)` | Register a settings UI panel for your plugin |
-| `getSetting(key)` | Get a saved setting value |
-| `saveSetting(key, value)` | Save a setting value |
-| `onSettingsSaved(cb)` | Listen for when the user saves settings |
-| `showAlert(options)` | Show a native Electron alert dialog |
-| `showPrompt(options)` | Show a prompt dialog for user input |
-| `logger` | Winston logger (logs appear in the app log file) |
+```js
+// ==Plugin==
+// @name        My Plugin
+// @version     1.0.0
+// @author      You
+// @description Does something cool
+// @updateUrl   https://raw.githubusercontent.com/you/repo/main/myplugin.plugin.js
+// ==/Plugin==
+
+StremioEnhancedAPI.registerSettings([
+    { key: 'enabled', type: 'toggle', label: 'Enable feature', defaultValue: true }
+]);
+
+StremioEnhancedAPI.getSetting('enabled').then(val => {
+    if (val !== false) {
+        StremioEnhancedAPI.logger.info('Plugin started');
+        // your code here
+    }
+});
+```
+
+See the [Plugin API wiki](docs/plugin-api.md) for the full reference — manifest fields, all API methods, setting types, dependency declarations, and complete examples.
 
 See the [examples/](./examples) folder for sample themes and plugins.
 
@@ -113,7 +160,8 @@ See the [examples/](./examples) folder for sample themes and plugins.
 ## 🧪 Known Issues
 
 - **Blu-ray PGS subtitles** don't load due to browser limitations — use VLC or MPV for those streams
-- **macOS** requires bypassing Gatekeeper (see [Downloads](#-downloads))
+- **macOS** requires bypassing Gatekeeper on first launch (see [Downloads](#-downloads))
+- Disabling a plugin requires a page reload to fully take effect
 
 ---
 
