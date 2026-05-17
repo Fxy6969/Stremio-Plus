@@ -1,6 +1,4 @@
 # Stremio Plus
-![Stremio Plus Banner](images/modernglass_preview.png)
-
 [![GitHub stars](https://img.shields.io/github/stars/Fxy6969/stremio-plus?style=social)](https://github.com/Fxy6969/stremio-plus/stargazers)
 [![GitHub release](https://img.shields.io/github/v/release/Fxy6969/stremio-plus?style=flat&logo=github)](https://github.com/Fxy6969/stremio-plus/releases/latest)
 [![GitHub downloads](https://img.shields.io/github/downloads/Fxy6969/stremio-plus/total?style=flat&logo=github&label=Downloads)](https://github.com/Fxy6969/stremio-plus/releases/latest)
@@ -23,8 +21,6 @@ It wraps [Stremio Web](https://web.stremio.com/) with plugin and theme support, 
 - **Required Plugin declarations** – Themes can declare plugins they depend on; the app will prompt the user to install them first
 - **Community Marketplace** – Browse and install community-submitted themes and plugins directly from inside the app
 
-![community tab](images/communitytab.png)
-
 ![Marketplace](images/marketplace_loop.gif)
 
 ### 🔧 Enhancements
@@ -39,17 +35,11 @@ It wraps [Stremio Web](https://web.stremio.com/) with plugin and theme support, 
 | **Window transparency** | Enables transparent-background themes via Electron's transparent window flag |
 | **Auto-updater** | Checks for new releases and downloads/installs updates automatically |
 
-![discord presence](images/discordrichpresence.png)
-
 ---
 
 ## 📷 Gallery
 
 <video src="images/preview.mp4" controls width="100%"></video>
-
-| Settings | Dev Tools |
-|---|---|
-| ![Settings](images/settings_screenshot.png) | ![DevTools](images/devtools.jpeg) |
 
 ---
 
