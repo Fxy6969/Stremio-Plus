@@ -39,13 +39,13 @@ It wraps [Stremio Web](https://web.stremio.com/) with plugin and theme support, 
 
 ## 📷 Gallery
 
-<video src="images/preview.mp4" controls width="100%"></video>
+<video src="https://raw.githubusercontent.com/Fxy6969/Stremio-Plus/main/images/preview.mp4" controls width="100%"></video>
 
 ---
 
 ## 📥 Downloads
 
-<video src="images/wizardvideo.mp4" controls width="100%"></video>
+https://github.com/user-attachments/assets/b01e1ef0-b266-41fd-8c6e-5e797b617d3f
 
 Grab the latest build from [the releases tab](https://github.com/Fxy6969/stremio-plus/releases/latest).
 
