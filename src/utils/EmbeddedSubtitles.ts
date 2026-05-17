@@ -20,17 +20,9 @@ class EmbeddedSubtitles {
         video.addEventListener("loadedmetadata", async () => {
             if (this.extractedAlready) return;
             this.extractedAlready = true;
-            
-            if (video.textTracks.length === 0) {
-                logger.info("No native embedded subtitles found. Initializing JIT HLS Subtitle Fetcher...");
-                
-                Helpers.createToast(
-                    "extractingAlertToast",
-                    "Extracting subtitles...",
-                    "Fetching embedded subtitles from server, please wait.",
-                    "info"
-                );
 
+            if (video.textTracks.length === 0) {
+                logger.info("No native embedded subtitles found. Probing for JIT HLS subtitles...");
                 try {
                     await this.initializeJITSubtitles(video);
                 } catch (err) {
@@ -79,37 +71,52 @@ class EmbeddedSubtitles {
         const subLines = masterText.split('\n').filter(l => l.startsWith('#EXT-X-MEDIA:TYPE=SUBTITLES'));
         
         if (subLines.length === 0) {
-            Helpers.createToast("noEmbeddedSubsToast", "No embedded subtitles", "No subtitle tracks found in stream.", "info");
+            logger.info("No embedded subtitle tracks found in stream.");
             return;
         }
 
+        Helpers.createToast(
+            "extractingAlertToast",
+            "Extracting subtitles...",
+            "Fetching embedded subtitles from stream, please wait.",
+            "info"
+        );
+
         let tracksAdded = 0;
         const dummyBlobUrl = URL.createObjectURL(new Blob(["WEBVTT\n\n"], { type: "text/vtt" }));
-        
+
         const fragment = document.createDocumentFragment();
         let isFirstTrack = true;
         let isFullyInitialized = false;
 
-        for (const subLine of subLines) {
-            const uriMatch = subLine.match(/URI="([^"]+)"/);
-            const langMatch = subLine.match(/LANGUAGE="([^"]+)"/);
-            const nameMatch = subLine.match(/NAME="([^"]+)"/);
-            
-            if (!uriMatch) continue;
+        const parsedSubLines = subLines.map(subLine => ({
+            uriMatch: subLine.match(/URI="([^"]+)"/),
+            langMatch: subLine.match(/LANGUAGE="([^"]+)"/),
+            nameMatch: subLine.match(/NAME="([^"]+)"/),
+        })).filter(p => p.uriMatch);
 
-            const subPlaylistUrl = new URL(uriMatch[1], masterUrl).toString();
-            const subPlaylistRes = await fetch(subPlaylistUrl);
-            if (!subPlaylistRes.ok) continue;
+        const playlistResults = await Promise.all(
+            parsedSubLines.map(async ({ uriMatch, langMatch, nameMatch }) => {
+                const subPlaylistUrl = new URL(uriMatch![1], masterUrl).toString();
+                const subPlaylistRes = await fetch(subPlaylistUrl);
+                if (!subPlaylistRes.ok) return null;
+                return { text: await subPlaylistRes.text(), subPlaylistUrl, langMatch, nameMatch };
+            })
+        );
 
-            const lines = (await subPlaylistRes.text()).split('\n');
+        for (const result of playlistResults) {
+            if (!result) continue;
+            const { text, subPlaylistUrl, langMatch, nameMatch } = result;
+
+            const lines = text.split('\n');
             const segments: { url: string, start: number, end: number, fetched: boolean }[] = [];
             let currentTime = 0;
-            
+
             for (let i = 0; i < lines.length; i++) {
                 if (lines[i].startsWith('#EXTINF:')) {
                     const duration = parseFloat(lines[i].split(':')[1].split(',')[0]);
                     const segmentUri = lines[i + 1].trim();
-                    
+
                     segments.push({
                         url: new URL(segmentUri, subPlaylistUrl).toString(),
                         start: currentTime,
@@ -124,8 +131,8 @@ class EmbeddedSubtitles {
             trackEl.kind = "subtitles";
             trackEl.label = nameMatch ? nameMatch[1] : "Embedded";
             trackEl.srclang = langMatch ? langMatch[1] : "en";
-            trackEl.src = dummyBlobUrl; 
-            
+            trackEl.src = dummyBlobUrl;
+
             if (isFirstTrack) {
                 trackEl.default = true; // Wakes up Stremio UI to add the subs to the subtitles menu
                 isFirstTrack = false;

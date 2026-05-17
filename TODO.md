@@ -10,7 +10,7 @@
 
 ## Requires creating a new GitHub repo
 
-- [ ] **Own plugin/theme registry** — currently the marketplace fetches from `REVENGE977/stremio-enhanced-registry`. Create `Fxy6969/stremio-plus-registry` with the same JSON format, then update `URLS.REGISTRY` in `constants.ts` and the link in `marketplace-tab.html`. Submit the Glass Theme and its plugins as the first entries.
+- [x] **Own plugin/theme registry** — currently the marketplace fetches from `REVENGE977/stremio-enhanced-registry`. Create `Fxy6969/stremio-plus-registry` with the same JSON format, then update `URLS.REGISTRY` in `constants.ts` and the link in `marketplace-tab.html`. Submit the Glass Theme and its plugins as the first entries.
 
 ## Requires running the app
 

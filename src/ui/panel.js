@@ -3448,7 +3448,6 @@
             invoke('reload_app').catch(()=>{ try{window.location.reload();}catch(_){} });
             return;
         }
-        if(e.code==='ShiftRight'&&!e.repeat){e.preventDefault();isOpen?closePanel():openPanel();return;}
         if(e.key==='Escape'&&lightbox.classList.contains('open')){closeLightbox();return;}
         if(e.key==='Escape'&&isOpen){closePanel();return;}
         // ── Arrow key navigation through plugin list ──────────────────────────────

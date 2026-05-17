@@ -25,6 +25,8 @@ It wraps [Stremio Web](https://web.stremio.com/) with plugin and theme support, 
 
 ![community tab](images/communitytab.png)
 
+![Marketplace](images/marketplace_loop.gif)
+
 ### 🔧 Enhancements
 | Feature | Description |
 |---|---|
@@ -43,6 +45,8 @@ It wraps [Stremio Web](https://web.stremio.com/) with plugin and theme support, 
 
 ## 📷 Gallery
 
+<video src="images/preview.mp4" controls width="100%"></video>
+
 | Settings | Dev Tools |
 |---|---|
 | ![Settings](images/settings_screenshot.png) | ![DevTools](images/devtools.jpeg) |
@@ -50,6 +54,8 @@ It wraps [Stremio Web](https://web.stremio.com/) with plugin and theme support, 
 ---
 
 ## 📥 Downloads
+
+<video src="images/wizardvideo.mp4" controls width="100%"></video>
 
 Grab the latest build from [the releases tab](https://github.com/Fxy6969/stremio-plus/releases/latest).
 

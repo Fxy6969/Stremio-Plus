@@ -129,7 +129,7 @@ export const URLS = {
     STREMIO_WEB: 'https://web.stremio.com/',
     STREMIO_WEB_ADD_ADDON: 'https://web.stremio.com/#/addons?addon=',
     REGISTRY: 'https://raw.githubusercontent.com/Fxy6969/stremio-plus-registry/main/registry.json',
-    VERSION_CHECK: 'https://github.com/Fxy6969/stremio-plus/raw/main/version',
+    VERSION_CHECK: 'https://raw.githubusercontent.com/Fxy6969/stremio-plus/main/version',
     RELEASES_API: 'https://api.github.com/repos/Fxy6969/stremio-plus/releases/latest',
     RELEASES_PAGE: 'https://github.com/Fxy6969/stremio-plus/releases/latest',
     STREMIO_SERVICE_GITHUB_API: "https://api.github.com/repos/Stremio/stremio-service/releases/latest",
@@ -174,7 +174,7 @@ export const TIMEOUTS = {
     INSTALL_COMPLETION: 120000,
     SERVICE_CHECK_INTERVAL: 5000,
     SERVER_RELOAD_DELAY: 1500,
-    CORESTATE_RETRY_INTERVAL: 1000,
+    CORESTATE_RETRY_INTERVAL: 100,
     CORESTATE_MAX_RETRIES: 30,
 } as const;
 
