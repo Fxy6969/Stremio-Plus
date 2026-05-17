@@ -109,20 +109,24 @@ npm install
 
 ## 🎨 Installing Themes
 
-1. Open **Settings** → scroll down to the Enhanced section → click **Open Themes Folder**
-2. Drop your `.theme.css` file into that folder
-3. The theme appears in settings immediately — click it to apply
-4. To go back to the default look, select **Default** from the theme list
+1. Press <kbd>⇧ Space</kbd> to open the Stremio Plus panel
+2. Go to the **Themes** tab
+3. Click **Open themes folder** at the bottom of the panel
+4. Drop your `.theme.css` file into that folder
+5. The theme appears in the panel — click it to apply
+6. To go back to the default look, select **Default**
 
 ---
 
 ## 🔌 Installing Plugins
 
-1. Open **Settings** → scroll down → click **Open Plugins Folder**
-2. Drop your `.plugin.js` file into that folder
-3. The plugin appears in settings — toggle it on to enable it
-4. If the plugin registers a settings panel, a settings button appears on its card
-5. To disable a plugin, toggle it off — a page reload is required to fully unload it (<kbd>Ctrl</kbd>+<kbd>R</kbd>)
+1. Press <kbd>⇧ Space</kbd> to open the Stremio Plus panel
+2. Go to the **Plugins** tab
+3. Click **Open plugins folder** at the bottom of the panel
+4. Drop your `.plugin.js` file into that folder
+5. The plugin appears in the panel — toggle it on to enable it
+6. If the plugin registers a settings panel, a settings button appears on its card
+7. To disable a plugin, toggle it off — a page reload is required to fully unload it (<kbd>Ctrl</kbd>+<kbd>R</kbd>)
 
 ---
 
