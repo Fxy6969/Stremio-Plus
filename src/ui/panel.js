@@ -451,6 +451,8 @@
         .st-be-card-name { font-size:10px !important; font-weight:500 !important; color:rgba(255,255,255,0.65) !important; line-height:1.3 !important; }
         .st-be-card-hint { font-size:9px !important; color:rgba(255,255,255,0.22) !important; line-height:1.35 !important; }
         .st-be-card.active .st-be-card-name { color:rgba(255,255,255,0.88) !important; }
+        .st-be-card.st-be-disabled { opacity:0.35 !important; cursor:not-allowed !important; pointer-events:auto !important; }
+        .st-be-card.st-be-disabled:hover { background:none !important; border-color:rgba(255,255,255,0.07) !important; }
         .st-svc-status-row { display:flex !important; align-items:center !important; gap:6px !important; padding:4px 14px 8px !important; }
         .st-svc-dot {
             width:6px !important; height:6px !important; border-radius:50% !important; flex-shrink:0 !important;
@@ -846,6 +848,8 @@
         #__st_root__.no-blur #__st_panel__.card-glass .st-card { backdrop-filter:none !important; -webkit-backdrop-filter:none !important; background:rgba(255,255,255,0.06) !important; }
         /* Film grain */
         #__st_panel__.sp-grain::after { content:"" !important; position:absolute !important; inset:0 !important; pointer-events:none !important; border-radius:inherit !important; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)' opacity='0.06'/%3E%3C/svg%3E") !important; opacity:0.35 !important; z-index:1 !important; }
+        .onb-server-disabled { opacity:0.38 !important; pointer-events:none !important; }
+
         /* ── sp-pill (theme apply, collection install) ── */
         .sp-pill { all:unset !important; cursor:pointer !important; font-family:inherit !important; padding:5px 11px !important; border-radius:7px !important; font-size:11px !important; font-weight:600 !important; background:rgba(255,255,255,0.06) !important; border:0.5px solid rgba(255,255,255,0.1) !important; color:rgba(255,255,255,0.78) !important; transition:background 0.18s,border-color 0.18s,transform 0.12s !important; white-space:nowrap !important; }
         .sp-pill:hover { background:rgba(255,255,255,0.1) !important; }
@@ -853,6 +857,9 @@
         .sp-pill.active { background:var(--accent-soft,rgba(255,255,255,0.08)) !important; color:var(--accent,rgba(255,255,255,0.9)) !important; border-color:color-mix(in oklab,var(--accent,rgba(255,255,255,0.9)) 30%,transparent) !important; }
         .sp-pill.primary { background:var(--accent,rgba(255,255,255,0.9)) !important; color:#15101a !important; border-color:transparent !important; box-shadow:0 0 14px var(--accent-glow,rgba(255,255,255,0.15)) !important; }
         .sp-pill.primary:hover { filter:brightness(1.1) !important; }
+        .sp-pill.installed { background:rgba(100,200,130,0.07) !important; color:rgba(100,200,130,0.55) !important; border-color:rgba(100,200,130,0.18) !important; cursor:default !important; pointer-events:none !important; }
+        .sp-pill.update { background:rgba(255,191,65,0.08) !important; color:rgba(255,191,65,0.8) !important; border-color:rgba(255,191,65,0.25) !important; }
+        .sp-pill.update:hover { background:rgba(255,191,65,0.15) !important; filter:none !important; }
         /* ── Stars ── */
         .sp-stars { display:inline-flex !important; align-items:center !important; gap:3px !important; color:hsla(45,90%,70%,0.7) !important; font-size:10.5px !important; font-variant-numeric:tabular-nums !important; }
         /* ── Metadata chips in card body ── */
@@ -1403,15 +1410,15 @@
                         <span class="st-be-card-name">Stremio Service</span>
                         <span class="st-be-card-hint">localhost:11470</span>
                     </button>
-                    <button type="button" class="st-be-card" data-be="mpv">
+                    <button type="button" class="st-be-card st-be-disabled" data-be="mpv">
                         <span class="st-be-card-icon">🎬</span>
                         <span class="st-be-card-name">MPV (native)</span>
-                        <span class="st-be-card-hint">Thumbnail + upscale</span>
+                        <span class="st-be-card-hint">Coming soon</span>
                     </button>
-                    <button type="button" class="st-be-card" data-be="server">
+                    <button type="button" class="st-be-card st-be-disabled" data-be="server">
                         <span class="st-be-card-icon">🖥</span>
                         <span class="st-be-card-name">server.js</span>
-                        <span class="st-be-card-hint">Local stream server</span>
+                        <span class="st-be-card-hint">Coming soon</span>
                     </button>
                     <button type="button" class="st-be-card" data-be="native">
                         <span class="st-be-card-icon">📺</span>
@@ -1613,7 +1620,9 @@
                 <div class="sp-prev-cap">${escapeHtml(p.title)}</div>
                </div>`;
         mktList.innerHTML = items.map((m, i) => {
-            const installed = mktInstalled.has(m.id);
+            const installedEntry = allPlugins.find(p => p.name === m.name);
+            const installed = mktInstalled.has(m.id) || !!installedEntry;
+            const needsUpdate = !mktInstalled.has(m.id) && !!installedEntry && installedEntry.version !== m.version;
             const exp = mktExpanded === m.id;
             const tr = m.trending;
             const starsStr = m.stars >= 1000 ? (m.stars/1000).toFixed(1)+'k' : m.stars;
@@ -1649,7 +1658,12 @@
                         </div>
                     </div>
                     <div class="st-card-right">
-                        <button class="sp-pill ${installed ? 'active' : 'primary'}" data-mkt-install="${escapeHtml(m.id)}">${installed ? 'Installed' : 'Install'}</button>
+                        ${needsUpdate
+                            ? `<button class="sp-pill update" data-mkt-install="${escapeHtml(m.id)}" data-mkt-action="update">Update</button>`
+                            : installed
+                                ? `<button class="sp-pill installed" disabled>Installed</button>`
+                                : `<button class="sp-pill primary" data-mkt-install="${escapeHtml(m.id)}" data-mkt-action="install">Install</button>`
+                        }
                     </div>
                 </div>
                 ${previewStrip}
@@ -1663,23 +1677,24 @@
                 renderMarketplace();
             };
         });
-        // Wire install
+        // Wire install / update
         mktList.querySelectorAll('[data-mkt-install]').forEach(btn => {
             btn.onclick = async e => {
                 e.stopPropagation();
                 const id = btn.dataset.mktInstall;
-                if (mktInstalled.has(id)) return;
+                const action = btn.dataset.mktAction || 'install';
                 const m = MKT_DATA.find(x => x.id === id);
                 if (!m) return;
-                btn.textContent = 'Installing…';
+                btn.textContent = action === 'update' ? 'Updating…' : 'Installing…';
                 btn.disabled = true;
                 try {
                     await invoke('install_from_url', { url: m.download });
                     mktInstalled.add(id);
-                    showToast(`Installed "${m.name}"`, 'ok');
-                    pushActivity('installed', 'Marketplace install', m.name);
+                    showToast(action === 'update' ? `Updated "${m.name}"` : `Installed "${m.name}"`, 'ok');
+                    pushActivity('installed', `Marketplace ${action}`, m.name);
+                    loadPlugins();
                 } catch(e) {
-                    showToast('Install failed: ' + e, 'err');
+                    showToast((action === 'update' ? 'Update' : 'Install') + ' failed: ' + e, 'err');
                 }
                 renderMarketplace();
             };
@@ -2050,7 +2065,59 @@
             ? (p.kind === 'Plugin' ? 'Enabled "' + p.name + '" — reload to apply' : 'Enabled theme "' + p.name + '"')
             : (p.kind === 'Plugin' ? 'Disabled "' + p.name + '"'                   : 'Disabled theme "' + p.name + '"');
         pushActivity(nowOn ? 'enabled' : 'disabled', msg, p.kind);
+        if (nowOn && p.requires && p.requires.length) checkAndPromptMissingDeps(p).catch(() => {});
         return msg;
+    }
+
+    async function checkAndPromptMissingDeps(p) {
+        const reqs = p.requires || [];
+        if (!reqs.length) return;
+
+        // Auto-enable deps that are installed but disabled
+        const disabledDeps = reqs.filter(name => {
+            const dep = allPlugins.find(x => x.name === name);
+            return dep && !dep.enabled;
+        });
+        for (const name of disabledDeps) {
+            const dep = allPlugins.find(x => x.name === name);
+            if (dep) {
+                await invoke('set_plugin_enabled', { name, enabled: true }).catch(() => {});
+                dep.enabled = true;
+            }
+        }
+
+        // Prompt to download deps that aren't installed at all
+        const notInstalled = reqs.filter(name => !allPlugins.find(x => x.name === name));
+        if (!notInstalled.length) return;
+
+        showToast({
+            title: `${notInstalled.length} required plugin${notInstalled.length > 1 ? 's' : ''} missing`,
+            detail: notInstalled.join(', '),
+            actions: [
+                { label: 'Download', primary: true, fn: async () => {
+                    await loadMarketplace();
+                    let installed = 0;
+                    for (const reqName of notInstalled) {
+                        const entry = MKT_DATA.find(x => x.name === reqName);
+                        if (!entry) { showToast(`"${reqName}" not found in registry`, 'err'); continue; }
+                        try {
+                            const name = await invoke('install_from_url', { url: entry.download });
+                            if (name) await invoke('set_plugin_enabled', { name, enabled: true }).catch(() => {});
+                            mktInstalled.add(entry.id);
+                            installed++;
+                        } catch(e) {
+                            showToast(`Failed to install "${reqName}"`, 'err');
+                        }
+                    }
+                    if (installed) {
+                        await loadPlugins();
+                        renderMarketplace();
+                        showToast(`Installed ${installed} missing plugin${installed > 1 ? 's' : ''}`, 'ok');
+                    }
+                }},
+                { label: 'Dismiss', fn: () => {} },
+            ]
+        }, 'info', { duration: 12000 });
     }
 
     // source cache: name -> css string (fetched on demand since list_plugins omits source)
@@ -2405,6 +2472,18 @@
                 ? `<div class="st-conflict-note">⚠ Possible CSS conflicts with: <strong>${escapeHtml([...new Set(conflicts.flatMap(c=>c.conflictsWith))].join(', '))}</strong> — shared selectors: ${escapeHtml([...new Set(conflicts.map(c=>c.selector))].slice(0,5).join(', '))}${conflicts.length > 5 ? '…' : ''}</div>`
                 : '';
 
+            const requiresBlock = deps.length ? `<div class="st-setting-row" style="align-items:flex-start;gap:8px;padding:9px 14px">
+                <span class="st-setting-name" style="font-size:9px;letter-spacing:0.06em;text-transform:uppercase;opacity:0.38;flex-shrink:0;padding-top:2px">Requires</span>
+                <div style="display:flex;flex-wrap:wrap;gap:4px">${deps.map(d => {
+                    const dep = allPlugins.find(x => x.name === d);
+                    const [c, t] = !dep
+                        ? ['rgba(255,80,80,0.7)', 'Not installed']
+                        : dep.enabled ? ['rgba(80,200,130,0.65)', 'Installed & active']
+                        : ['rgba(255,180,50,0.7)', 'Installed but disabled'];
+                    return `<span class="st-dep" style="border-color:${c};color:${c}" title="${escapeHtml(t)}">${escapeHtml(d)}</span>`;
+                }).join('')}</div>
+            </div>` : '';
+
             // Theme CSS variable sliders
             const themeVars = p.kind === 'Theme' ? extractCssVars(p.source || '') : [];
             const colorVars = themeVars.filter(v => /^#|rgba?|hsl/.test(v.value));
@@ -2500,7 +2579,7 @@
                             ${authorChip}
                             ${p.github ? `<span class="st-stars loading" id="__st_stars_${p.name.replace(/\W/g,'_')}__" title="GitHub stars">⭐ —</span>` : ''}
                             ${permBadges ? `<div style="display:inline-flex;flex-wrap:wrap;gap:3px">${permBadges}</div>` : ''}
-                            ${deps.length ? `<span style="font-size:10px;opacity:0.4">${deps.map(d=>`needs: ${escapeHtml(d)}`).join(', ')}</span>` : ''}
+                            ${deps.length ? `<span class="st-dep" style="font-size:9px;padding:1px 6px">needs ${deps.length} plugin${deps.length>1?'s':''}</span>` : ''}
                         </div>
                     </div>
                     <div class="st-card-right">
@@ -2511,7 +2590,7 @@
                         </svg>
                     </div>
                 </div>
-                <div class="st-settings-panel"><div class="st-settings-inner">${healthRow}${conflictNote}${sandboxNote}${settingsRows}${themeVarBlock ? `<div class="st-settings-inner" style="margin:8px 0 0 0;border:none;background:transparent">${themeVarBlock}</div>` : ''}</div></div>
+                <div class="st-settings-panel"><div class="st-settings-inner">${requiresBlock}${healthRow}${conflictNote}${sandboxNote}${settingsRows}${themeVarBlock ? `<div class="st-settings-inner" style="margin:8px 0 0 0;border:none;background:transparent">${themeVarBlock}</div>` : ''}</div></div>
                 ${errLogPanel}
             </div>`;
         }).join('');
@@ -2966,6 +3045,16 @@
     document.getElementById('__st_root__').appendChild(introEl);
 
     const GLASS_THEME_URL = 'https://raw.githubusercontent.com/Fxy6969/Stremio-Glass-Theme/refs/heads/v26/themes/liquid-glass.theme.css';
+    const GLASS_PLUGINS = [
+        'https://raw.githubusercontent.com/Fxy6969/Stremio-Glass-Theme/refs/heads/v26/plugins/context-menu-fix.plugin.js',
+        'https://raw.githubusercontent.com/Fxy6969/Stremio-Glass-Theme/refs/heads/v26/plugins/data-enrichment.plugin.js',
+        'https://raw.githubusercontent.com/Fxy6969/Stremio-Glass-Theme/refs/heads/v26/plugins/enhanced-covers.plugin.js',
+        'https://raw.githubusercontent.com/Fxy6969/Stremio-Glass-Theme/refs/heads/v26/plugins/enhanced-player.plugin.js',
+        'https://raw.githubusercontent.com/Fxy6969/Stremio-Glass-Theme/refs/heads/v26/plugins/enhanced-titlebar.plugin.js',
+        'https://raw.githubusercontent.com/Fxy6969/Stremio-Glass-Theme/refs/heads/v26/plugins/hero-div.plugin.js',
+        'https://raw.githubusercontent.com/Fxy6969/Stremio-Glass-Theme/refs/heads/v26/plugins/horizontal-navigation.plugin.js',
+        'https://raw.githubusercontent.com/Fxy6969/Stremio-Glass-Theme/refs/heads/v26/plugins/picture-in-picture.plugin.js',
+    ];
 
     const ONB_STEPS = [
         { id: 'welcome', label: 'Welcome', count: '00' },
@@ -3097,31 +3186,31 @@
         if (stepId === 'backend') {
             const be = typeof _currentBackend !== 'undefined' ? _currentBackend : 'service';
             const servers = [
-                { id: 'service', region: 'SVC',  regionH: 270, name: 'Stremio Service',  sub: 'Default · localhost:11470 · always on', ms: 2,   required: true  },
-                { id: 'mpv',     region: 'MPV',  regionH: 190, name: 'MPV (native)',      sub: 'Hardware decode, thumbnail seek, upscale', ms: 12,  required: false },
-                { id: 'server',  region: 'JS',   regionH: 35,  name: 'server.js',          sub: 'Local stream server · high compatibility', ms: 18,  required: false },
-                { id: 'native',  region: 'VID',  regionH: 340, name: 'Native &lt;video&gt;',  sub: 'Browser built-in player · coming soon', ms: null, required: false },
+                { id: 'service', region: 'SVC',  regionH: 270, name: 'Stremio Service',  sub: 'Default · localhost:11470 · always on', ms: 2,   required: true,  disabled: false },
+                { id: 'server',  region: 'JS',   regionH: 35,  name: 'server.js',          sub: 'Local stream server · high compatibility', ms: 18,  required: false, disabled: false },
+                { id: 'mpv',     region: 'MPV',  regionH: 190, name: 'MPV (native)',      sub: 'Hardware decode, thumbnail seek, upscale', ms: 12,  required: false, disabled: true  },
+                { id: 'native',  region: 'VID',  regionH: 340, name: 'Native &lt;video&gt;',  sub: 'Browser built-in player · coming soon', ms: null, required: false, disabled: true  },
             ];
             const rows = servers.map(s => {
-                const on = s.id === be || (s.required);
+                const on = s.id === be || s.required;
                 const bars = s.ms !== null ? (() => {
                     const lit = s.ms < 5 ? 5 : s.ms < 20 ? 4 : s.ms < 50 ? 3 : 2;
                     return `<span class="onb-server-pings">${Array.from({length:5},(_,i)=>`<span class="onb-server-ping${i<lit?'':' dim'}" style="height:${4+i*2}px"></span>`).join('')}</span>`;
                 })() : '';
                 const msLabel = s.ms !== null ? `<span class="onb-server-ms">${s.ms}ms</span>` : '';
                 return `
-                <div class="onb-server${on ? ' on' : ''}" style="--region-h:${s.regionH}" data-onb-be="${s.id}">
+                <div class="onb-server${on ? ' on' : ''}${s.disabled ? ' onb-server-disabled' : ''}" style="--region-h:${s.regionH}" data-onb-be="${s.id}"${s.disabled ? ' data-onb-be-locked' : ''}>
                     <div class="onb-server-flag">${s.region}</div>
                     <div class="onb-server-body">
                         <div class="onb-server-name-row">
                             <span class="onb-server-name">${s.name}</span>
                             ${s.required ? '<span class="onb-server-pill req">Required</span>' : ''}
-                            ${s.id === 'mpv' ? '<span class="onb-server-pill">Recommended</span>' : ''}
+                            ${s.disabled ? '<span class="onb-server-pill" style="opacity:0.5">Coming soon</span>' : ''}
                         </div>
                         <div class="onb-server-sub">${s.sub}</div>
                     </div>
                     ${bars}${msLabel}
-                    <button type="button" class="sp-toggle${on ? ' on' : ''}" data-onb-be-tog="${s.id}"><span class="sp-toggle-knob"></span></button>
+                    <button type="button" class="sp-toggle${on ? ' on' : ''}" data-onb-be-tog="${s.id}"${s.disabled ? ' disabled' : ''}><span class="sp-toggle-knob"></span></button>
                 </div>`;
             }).join('');
             return `
@@ -3274,9 +3363,8 @@
         if (stepId === 'backend') {
             document.getElementById('__st_onb_be__')?.addEventListener('click', async e => {
                 const row = e.target.closest('[data-onb-be]');
-                if (!row) return;
+                if (!row || row.hasAttribute('data-onb-be-locked')) return;
                 const be = row.dataset.onbBe;
-                if (be === 'native') { showToast('Native <video> — coming soon', 'err'); return; }
                 try {
                     await invoke('set_playback_backend', { backend: be });
                     _currentBackend = be;
@@ -3323,9 +3411,18 @@
                         // Enable the Continue button
                         const nextBtn = document.getElementById('__st_onb_next__');
                         if (nextBtn) nextBtn.removeAttribute('disabled');
-                        // Actually install
+                        // Actually install theme + required plugins, enabling each after install
                         invoke('install_from_url', { url: GLASS_THEME_URL })
-                            .then(() => { pushActivity('installed', 'Setup wizard installed Modern Glass theme', ''); loadPlugins(); })
+                            .then(async () => {
+                                for (const url of GLASS_PLUGINS) {
+                                    try {
+                                        const name = await invoke('install_from_url', { url });
+                                        if (name) await invoke('set_plugin_enabled', { name, enabled: true }).catch(() => {});
+                                    } catch(_) {}
+                                }
+                                pushActivity('installed', 'Setup wizard installed Modern Glass theme + plugins', '');
+                                loadPlugins();
+                            })
                             .catch(err => showToast('Theme install: ' + err, 'err'));
                     }
                 };
@@ -4467,6 +4564,11 @@
         if (!card) return;
         const be = card.dataset.be;
         if (!be || be === _currentBackend) return;
+
+        if (card.classList.contains('st-be-disabled')) {
+            showToast('Coming soon — not yet implemented', 'err');
+            return;
+        }
 
         if (be === 'native') {
             showToast('Native <video> — coming soon', 'err');
