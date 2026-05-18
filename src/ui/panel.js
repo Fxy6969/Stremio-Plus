@@ -1462,6 +1462,7 @@
             <div class="sp-set-section">
                 <div class="sp-set-section-title">About</div>
                 <div class="sp-set-row"><span class="sp-set-row-label">Author</span><span class="sp-set-row-aside">Fxy6969</span></div>
+                <div class="sp-set-row"><span class="sp-set-row-label">Based on</span><a class="sp-set-row-aside" href="https://github.com/REVENGE977/stremio-enhanced" target="_blank" style="text-decoration:underline;cursor:pointer;color:inherit">Stremio Enhanced by REVENGE977</a></div>
                 <div class="sp-set-row"><span class="sp-set-row-label">License</span><span class="sp-set-row-aside">MIT</span></div>
                 <div class="sp-set-row"><span class="sp-set-row-label">Source</span><a class="sp-set-row-aside" href="https://github.com/Fxy6969/Stremio-Plus" target="_blank" style="text-decoration:underline;cursor:pointer;color:inherit">github.com/Fxy6969</a></div>
                 <div class="sp-set-row" style="padding-top:6px">
@@ -2579,7 +2580,6 @@
                             ${authorChip}
                             ${p.github ? `<span class="st-stars loading" id="__st_stars_${p.name.replace(/\W/g,'_')}__" title="GitHub stars">⭐ —</span>` : ''}
                             ${permBadges ? `<div style="display:inline-flex;flex-wrap:wrap;gap:3px">${permBadges}</div>` : ''}
-                            ${deps.length ? `<span class="st-dep" style="font-size:9px;padding:1px 6px">needs ${deps.length} plugin${deps.length>1?'s':''}</span>` : ''}
                         </div>
                     </div>
                     <div class="st-card-right">
