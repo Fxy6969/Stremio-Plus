@@ -14,13 +14,13 @@
 
 ## Requires running the app
 
-- [ ] **README screenshots/GIFs** — capture and replace:
+- [ / ] **README screenshots/GIFs** — capture and replace:
   - Hero banner (main app window, home screen)
   - Settings panel open on the Enhanced section
   - Community marketplace browsing
   - A plugin being toggled on
   - Discord Rich Presence showing in Discord
 
-- [ ] **Marketplace preview images** — each registry entry supports a preview image URL. For every plugin and theme you submit, add a screenshot hosted in the registry repo (or a CDN) so users can preview before installing.
+- [x] **Marketplace preview images** — each registry entry supports a preview image URL. For every plugin and theme you submit, add a screenshot hosted in the registry repo (or a CDN) so users can preview before installing.
 
-- [ ] **Give Credit to Revenge in Stremio Settings, and Hide the Plugin/Theme section from stremio settings** - We only want to keep the About section.
+- [x] **Give Credit to Revenge in Stremio Settings, and Hide the Plugin/Theme section from stremio settings** - We only want to keep the About section.
