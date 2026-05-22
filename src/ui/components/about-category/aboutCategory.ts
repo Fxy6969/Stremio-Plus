@@ -35,9 +35,14 @@ export function getAboutCategoryTemplate(
         template = template.replace(placeholder, replacement);
     });
 
+    if (currentExternalPlayer === 'vlc') {
+        template = template.replace('id="vlc-path-option" style="display: none;"', 'id="vlc-path-option" style="display: block;"');
+    }
+    if (currentExternalPlayer === 'mpv') {
+        template = template.replace('id="mpv-path-option" style="display: none;"', 'id="mpv-path-option" style="display: block;"');
+    }
+
     template = template
-        .replace('{{ vlc_path_display }}', currentExternalPlayer === 'vlc' ? '' : 'none')
-        .replace('{{ mpv_path_display }}', currentExternalPlayer === 'mpv' ? '' : 'none')
         .replace('{{ vlc_custom_path }}', vlcCustomPath)
         .replace('{{ mpv_custom_path }}', mpvCustomPath);
 
