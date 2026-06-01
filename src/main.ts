@@ -204,9 +204,7 @@ async function createWindow() {
         maximizable: true,
         fullscreenable: true,
         useContentSize: true,
-        icon: process.platform === 'win32'
-            ? join(__dirname, '../images/icon.ico')
-            : join(__dirname, '../images/icon.png'),
+
         title: 'Stremio Plus',
         frame: transparencyEnabled ? false : true,
         transparent: transparencyEnabled,
@@ -263,9 +261,6 @@ async function useStremioService() {
 // ── App lifecycle ─────────────────────────────────────────────────────────────
 
 app.on('ready', async () => {
-    if (process.platform === 'darwin' && app.dock) {
-        app.dock.setIcon(join(__dirname, '../images/icon.png'));
-    }
     logger.info('Enhanced version: v' + Updater.getCurrentVersion());
     logger.info('Running on NodeJS version: ' + process.version);
     logger.info('Running on Electron version: v' + process.versions.electron);

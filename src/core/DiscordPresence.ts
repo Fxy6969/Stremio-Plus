@@ -2,12 +2,20 @@ import { Client as DiscordClient } from '@xhayper/discord-rpc';
 import { getLogger } from '../utils/logger';
 import { ActivityType } from 'discord-api-types/v10';
 import type { SetActivity } from '@xhayper/discord-rpc/dist/structures/ClientUser';
-import { DISCORD } from '../constants';
+import { DISCORD, STORAGE_KEYS } from '../constants';
 
 class DiscordPresence {
     private static logger = getLogger("DiscordPresence");
     private static rpc: DiscordClient | null = null;
     private static enabled = false;
+
+    public static getSettings() {
+        return {
+            privacyMode:     localStorage.getItem(STORAGE_KEYS.DISCORD_PRIVACY_MODE)  === 'true',
+            showTimestamps:  localStorage.getItem(STORAGE_KEYS.DISCORD_SHOW_TIMESTAMPS) !== 'false',
+            showPoster:      localStorage.getItem(STORAGE_KEYS.DISCORD_SHOW_POSTER)    !== 'false',
+        };
+    }
 
     public static start(): void {
         if (this.enabled) return;
@@ -60,27 +68,28 @@ class DiscordPresence {
     }
 
     public static setPlaying(details: string, state: string, startTimestamp: number, endTimestamp: number, imageKey: string | undefined): void {
-        this._updateActivity({ 
-            details, 
-            state, 
-            startTimestamp,
-            endTimestamp,
-            largeImageKey: imageKey || DISCORD.DEFAULT_IMAGE,
-            largeImageText: "Stremio Enhanced",
-            smallImageKey: "play",
-            smallImageText: "Playing..",
+        const { privacyMode, showTimestamps, showPoster } = this.getSettings();
+        this._updateActivity({
+            details:        privacyMode ? 'Watching something' : details,
+            state:          privacyMode ? 'Playing'            : state,
+            ...(showTimestamps && !privacyMode ? { startTimestamp, endTimestamp } : {}),
+            largeImageKey:  showPoster && !privacyMode ? (imageKey || DISCORD.DEFAULT_IMAGE) : DISCORD.DEFAULT_IMAGE,
+            largeImageText: "Stremio Plus",
+            smallImageKey:  "play",
+            smallImageText: "Playing",
             instance: false,
             type: ActivityType.Watching
         });
     }
 
     public static setPaused(details: string, state: string, imageKey: string | undefined): void {
+        const { privacyMode, showPoster } = this.getSettings();
         this._updateActivity({
-            details,
-            state,
-            largeImageKey: imageKey || DISCORD.DEFAULT_IMAGE,
-            largeImageText: "Stremio Enhanced",
-            smallImageKey: "pause",
+            details:        privacyMode ? 'Watching something' : details,
+            state:          privacyMode ? 'Paused'             : state,
+            largeImageKey:  showPoster && !privacyMode ? (imageKey || DISCORD.DEFAULT_IMAGE) : DISCORD.DEFAULT_IMAGE,
+            largeImageText: "Stremio Plus",
+            smallImageKey:  "pause",
             smallImageText: "Paused",
             instance: false,
             type: ActivityType.Watching
@@ -88,13 +97,14 @@ class DiscordPresence {
     }
 
     public static setExploring(details: string, imageKey: string | undefined): void {
-        this._updateActivity({ 
-            details,
-            state: 'Exploring',
-            largeImageKey: imageKey || DISCORD.DEFAULT_IMAGE,
-            largeImageText: "Stremio Enhanced",
-            smallImageKey: "menuburger",
-            smallImageText: "Main Menu",
+        const { privacyMode, showPoster } = this.getSettings();
+        this._updateActivity({
+            details:        privacyMode ? 'Browsing' : details,
+            state:          'Exploring',
+            largeImageKey:  showPoster && !privacyMode ? (imageKey || DISCORD.DEFAULT_IMAGE) : DISCORD.DEFAULT_IMAGE,
+            largeImageText: "Stremio Plus",
+            smallImageKey:  "menuburger",
+            smallImageText: "Browsing",
             instance: false,
             type: ActivityType.Playing
         });
@@ -104,7 +114,7 @@ class DiscordPresence {
         this._updateActivity({
             details: menuName,
             largeImageKey: DISCORD.DEFAULT_IMAGE,
-            largeImageText: "Stremio Enhanced",
+            largeImageText: "Stremio Plus",
             smallImageKey: "menuburger",
             smallImageText: "Main Menu",
             instance: false,

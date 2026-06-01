@@ -1135,6 +1135,28 @@
         .sp-prev-tile img { cursor:zoom-in !important; transition:opacity 0.15s !important; }
         .sp-prev-tile img:hover { opacity:0.85 !important; }
         @keyframes sp-lb-in { from { opacity:0; transform:scale(0.9); } to { opacity:1; transform:none; } }
+
+        /* ── Discord RPC section ── */
+        .sp-discord-sub { overflow:hidden !important; max-height:0 !important; transition:max-height 0.3s cubic-bezier(0.22,1,0.36,1) !important; }
+        .sp-discord-sub.open { max-height:600px !important; }
+        /* Preview card */
+        .dsc-preview { margin:10px 0 4px !important; background:#111214 !important; border-radius:8px !important; padding:12px !important; border:0.5px solid rgba(255,255,255,0.06) !important; }
+        .dsc-preview-tabs { display:flex !important; gap:4px !important; margin-bottom:10px !important; }
+        .dsc-preview-tab { all:unset !important; font-size:10px !important; padding:3px 9px !important; border-radius:5px !important; color:rgba(255,255,255,0.35) !important; cursor:pointer !important; transition:all 0.15s !important; background:rgba(255,255,255,0.04) !important; }
+        .dsc-preview-tab.active { background:rgba(88,101,242,0.25) !important; color:rgba(148,158,255,0.9) !important; }
+        .dsc-card { display:flex !important; gap:10px !important; align-items:flex-start !important; }
+        .dsc-card-img { position:relative !important; flex-shrink:0 !important; }
+        .dsc-card-large { width:56px !important; height:56px !important; border-radius:6px !important; background:linear-gradient(135deg,#5865f2,#3b429e) !important; display:flex !important; align-items:center !important; justify-content:center !important; font-size:22px !important; overflow:hidden !important; }
+        .dsc-card-large img { width:100% !important; height:100% !important; object-fit:cover !important; border-radius:6px !important; }
+        .dsc-card-small { position:absolute !important; bottom:-3px !important; right:-3px !important; width:18px !important; height:18px !important; border-radius:50% !important; background:#23272a !important; border:2px solid #111214 !important; display:flex !important; align-items:center !important; justify-content:center !important; font-size:9px !important; }
+        .dsc-card-info { flex:1 !important; min-width:0 !important; }
+        .dsc-card-app { font-size:10px !important; font-weight:700 !important; color:rgba(255,255,255,0.9) !important; margin-bottom:3px !important; letter-spacing:0.03em !important; }
+        .dsc-card-detail { font-size:11px !important; color:rgba(255,255,255,0.7) !important; white-space:nowrap !important; overflow:hidden !important; text-overflow:ellipsis !important; line-height:1.4 !important; }
+        .dsc-card-state { font-size:11px !important; color:rgba(255,255,255,0.5) !important; white-space:nowrap !important; overflow:hidden !important; text-overflow:ellipsis !important; line-height:1.4 !important; }
+        .dsc-card-ts { margin-top:6px !important; }
+        .dsc-ts-bar { height:3px !important; background:rgba(255,255,255,0.1) !important; border-radius:2px !important; overflow:hidden !important; margin-bottom:3px !important; }
+        .dsc-ts-fill { height:100% !important; width:38% !important; background:#5865f2 !important; border-radius:2px !important; }
+        .dsc-ts-labels { display:flex !important; justify-content:space-between !important; font-size:9px !important; color:rgba(255,255,255,0.3) !important; }
     `;
     document.head.appendChild(spStyle);
     
@@ -1399,6 +1421,60 @@
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
                         Clear saved data
                     </button>
+                </div>
+            </div>
+            <!-- Discord RPC -->
+            <div class="sp-set-section">
+                <div class="sp-set-section-title">Discord Rich Presence</div>
+                <div class="sp-set-row">
+                    <span class="sp-set-row-label">Enable</span>
+                    <div class="sp-set-row-ctrl">
+                        <button type="button" class="sp-toggle lg" id="__st_discord_toggle__"><span class="sp-toggle-knob"></span></button>
+                    </div>
+                </div>
+                <div class="sp-discord-sub" id="__st_discord_sub__">
+                    <div class="sp-set-row">
+                        <span class="sp-set-row-label">Privacy mode</span>
+                        <div class="sp-set-row-ctrl">
+                            <button type="button" class="sp-toggle lg" id="__st_discord_privacy__"><span class="sp-toggle-knob"></span></button>
+                            <span class="sp-set-row-aside">Hide title &amp; episode</span>
+                        </div>
+                    </div>
+                    <div class="sp-set-row">
+                        <span class="sp-set-row-label">Show timestamps</span>
+                        <div class="sp-set-row-ctrl">
+                            <button type="button" class="sp-toggle lg" id="__st_discord_timestamps__"><span class="sp-toggle-knob"></span></button>
+                        </div>
+                    </div>
+                    <div class="sp-set-row">
+                        <span class="sp-set-row-label">Show poster image</span>
+                        <div class="sp-set-row-ctrl">
+                            <button type="button" class="sp-toggle lg" id="__st_discord_poster__"><span class="sp-toggle-knob"></span></button>
+                        </div>
+                    </div>
+                    <!-- Live preview -->
+                    <div class="dsc-preview">
+                        <div class="dsc-preview-tabs">
+                            <button class="dsc-preview-tab active" data-dsc-tab="playing">Playing</button>
+                            <button class="dsc-preview-tab" data-dsc-tab="paused">Paused</button>
+                            <button class="dsc-preview-tab" data-dsc-tab="browsing">Browsing</button>
+                        </div>
+                        <div class="dsc-card">
+                            <div class="dsc-card-img">
+                                <div class="dsc-card-large" id="__st_dsc_img__">🎬</div>
+                                <div class="dsc-card-small" id="__st_dsc_small__">▶</div>
+                            </div>
+                            <div class="dsc-card-info">
+                                <div class="dsc-card-app">Stremio Plus</div>
+                                <div class="dsc-card-detail" id="__st_dsc_detail__">Breaking Bad</div>
+                                <div class="dsc-card-state" id="__st_dsc_state__">Watching S2 E5</div>
+                                <div class="dsc-card-ts" id="__st_dsc_ts__">
+                                    <div class="dsc-ts-bar"><div class="dsc-ts-fill"></div></div>
+                                    <div class="dsc-ts-labels"><span>23:14</span><span>-18:42</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- Playback Backend -->
@@ -5072,6 +5148,105 @@
             if (now) setPageBlur(false);
         };
     }
+
+    // ── Discord RPC settings ──────────────────────────────────────────────────────
+    (() => {
+        const dscToggle      = document.getElementById('__st_discord_toggle__');
+        const dscSub         = document.getElementById('__st_discord_sub__');
+        const dscPrivacy     = document.getElementById('__st_discord_privacy__');
+        const dscTimestamps  = document.getElementById('__st_discord_timestamps__');
+        const dscPoster      = document.getElementById('__st_discord_poster__');
+        if (!dscToggle || !dscSub) return;
+
+        // Load saved state
+        const rpcOn      = localStorage.getItem('discordrichpresence') === 'true';
+        const privOn     = localStorage.getItem('discordPrivacyMode')    === 'true';
+        const tsOn       = localStorage.getItem('discordShowTimestamps') !== 'false';
+        const posterOn   = localStorage.getItem('discordShowPoster')     !== 'false';
+
+        if (rpcOn)    { dscToggle.classList.add('on');     dscSub.classList.add('open'); }
+        if (privOn)   dscPrivacy?.classList.add('on');
+        if (tsOn)     dscTimestamps?.classList.add('on');
+        if (posterOn) dscPoster?.classList.add('on');
+
+        // Enable toggle — just flips the pref; the actual connect/disconnect is
+        // handled by the preload's settingsToggles which watches #discordrichpresence.
+        // Here we mirror the state and show/hide the sub-options + preview.
+        dscToggle.onclick = function() {
+            const now = this.classList.toggle('on');
+            localStorage.setItem('discordrichpresence', now ? 'true' : 'false');
+            dscSub.classList.toggle('open', now);
+            // Notify the preload so the actual RPC connection follows
+            window.dispatchEvent(new CustomEvent('st:discord:toggle', { detail: { enabled: now } }));
+            updateDscPreview();
+        };
+
+        if (dscPrivacy) {
+            dscPrivacy.onclick = function() {
+                const now = this.classList.toggle('on');
+                localStorage.setItem('discordPrivacyMode', now ? 'true' : 'false');
+                updateDscPreview();
+            };
+        }
+        if (dscTimestamps) {
+            dscTimestamps.onclick = function() {
+                const now = this.classList.toggle('on');
+                localStorage.setItem('discordShowTimestamps', now ? 'true' : 'false');
+                updateDscPreview();
+            };
+        }
+        if (dscPoster) {
+            dscPoster.onclick = function() {
+                const now = this.classList.toggle('on');
+                localStorage.setItem('discordShowPoster', now ? 'true' : 'false');
+                updateDscPreview();
+            };
+        }
+
+        // Preview tab switching
+        dscSub.querySelectorAll('.dsc-preview-tab').forEach(btn => {
+            btn.addEventListener('click', function() {
+                dscSub.querySelectorAll('.dsc-preview-tab').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                updateDscPreview();
+            });
+        });
+
+        function updateDscPreview() {
+            const tab       = dscSub.querySelector('.dsc-preview-tab.active')?.dataset?.dscTab || 'playing';
+            const privacy   = localStorage.getItem('discordPrivacyMode')    === 'true';
+            const showTs    = localStorage.getItem('discordShowTimestamps') !== 'false';
+            const showPstr  = localStorage.getItem('discordShowPoster')     !== 'false';
+
+            const detailEl  = document.getElementById('__st_dsc_detail__');
+            const stateEl   = document.getElementById('__st_dsc_state__');
+            const tsEl      = document.getElementById('__st_dsc_ts__');
+            const smallEl   = document.getElementById('__st_dsc_small__');
+            const imgEl     = document.getElementById('__st_dsc_img__');
+            if (!detailEl || !stateEl || !tsEl || !smallEl || !imgEl) return;
+
+            imgEl.innerHTML = showPstr && !privacy ? '🎬' : '<span style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.6)">S+</span>';
+
+            if (tab === 'playing') {
+                detailEl.textContent = privacy ? 'Watching something' : 'Breaking Bad';
+                stateEl.textContent  = privacy ? 'Playing'            : 'Watching S2 E5';
+                smallEl.textContent  = '▶';
+                tsEl.style.display   = (showTs && !privacy) ? '' : 'none';
+            } else if (tab === 'paused') {
+                detailEl.textContent = privacy ? 'Watching something' : 'Breaking Bad';
+                stateEl.textContent  = privacy ? 'Paused'             : 'Paused at 23:14 in S2 E5';
+                smallEl.textContent  = '⏸';
+                tsEl.style.display   = 'none';
+            } else {
+                detailEl.textContent = privacy ? 'Browsing' : 'Library';
+                stateEl.textContent  = 'Exploring';
+                smallEl.textContent  = '☰';
+                tsEl.style.display   = 'none';
+            }
+        }
+
+        updateDscPreview();
+    })();
 
     // Activity tab visibility toggle
     const actTabBtn = overlay.querySelector('.st-tab[data-tab="activity"]');

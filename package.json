@@ -1,6 +1,6 @@
 {
 	"name": "stremio-plus",
-	"version": "1.1.5",
+	"version": "26.0.0",
 	"description": "Electron-based Stremio client with plugins, themes, and enhanced features.",
 	"main": "./dist/main.js",
 	"scripts": {
@@ -52,7 +52,6 @@
 		"appId": "com.fxy6969.stremio-plus",
 		"productName": "Stremio Plus",
 		"asar": true,
-		"icon": "images/icon",
 		"directories": {
 			"output": "release-builds"
 		},
@@ -76,12 +75,10 @@
 			]
 		},
 		"mac": {
-			"target": "dmg",
-			"icon": "images/icon.icns"
+			"target": "dmg"
 		},
 		"linux": {
-			"target": "AppImage",
-			"icon": "images/icon.png"
+			"target": "AppImage"
 		}
 	}
 }

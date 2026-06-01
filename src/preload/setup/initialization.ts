@@ -14,6 +14,9 @@ export function initializeUserSettings(): void {
         [STORAGE_KEYS.ENABLED_PLUGINS]: "[]",
         [STORAGE_KEYS.CHECK_UPDATES_ON_STARTUP]: "true",
         [STORAGE_KEYS.DISCORD_RPC]: "false",
+        [STORAGE_KEYS.DISCORD_PRIVACY_MODE]: "false",
+        [STORAGE_KEYS.DISCORD_SHOW_TIMESTAMPS]: "true",
+        [STORAGE_KEYS.DISCORD_SHOW_POSTER]: "true",
     };
     
     for (const [key, defaultValue] of Object.entries(defaults)) {

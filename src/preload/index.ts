@@ -102,6 +102,18 @@ window.addEventListener("load", () => {
         discordTracker.init();
     }
 
+    // Panel can toggle Discord RPC via a custom event (context isolation prevents direct calls)
+    window.addEventListener('st:discord:toggle', (e: Event) => {
+        const { enabled } = (e as CustomEvent<{ enabled: boolean }>).detail;
+        if (enabled) {
+            DiscordPresence.start();
+            discordTracker.init();
+        } else {
+            DiscordPresence.stop();
+            discordTracker.stop();
+        }
+    });
+
     // UI Hooks (Transparency)
     getTransparencyStatus().then((status) => {
         isTransparencyEnabled = status;
