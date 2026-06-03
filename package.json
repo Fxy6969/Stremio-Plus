@@ -27,7 +27,7 @@
 	"devDependencies": {
 		"@types/unzipper": "^0.10.11",
 		"electron": "^41.1.0",
-		"electron-builder": "^26.4.0",
+		"electron-builder": "^26.8.1",
 		"typescript": "^5.7.2"
 	},
 	"dependencies": {
@@ -42,11 +42,11 @@
 		"dmg-license": "^1.0.11"
 	},
 	"files": [
+		"dist/**/*",
 		"static/**/*",
+		"index.html",
 		"!**/node_modules/*",
-		"!**/dist/*",
-		"!**/src/*",
-		"index.html"
+		"!**/src/*"
 	],
 	"build": {
 		"appId": "com.fxy6969.stremio-plus",
@@ -73,6 +73,15 @@
 					"target": "portable"
 				}
 			]
+		},
+		"nsis": {
+			"oneClick": true,
+			"allowToChangeInstallationDirectory": false,
+			"createDesktopShortcut": "always",
+			"createStartMenuShortcut": true,
+			"shortcutName": "Stremio Plus",
+			"perMachine": false,
+			"deleteAppDataOnUninstall": true
 		},
 		"mac": {
 			"target": "dmg"
