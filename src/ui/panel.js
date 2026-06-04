@@ -1879,7 +1879,12 @@
     changelogModal.addEventListener('mousedown', e => { if (e.target === changelogModal) changelogModal.classList.remove('open'); });
     
     // ── Helpers ───────────────────────────────────────────────────────────────────
-    const invoke = window.__stElectronIPC__;
+    // Read the bridge lazily so it works even if the preload sets it after the IIFE runs.
+    const invoke = (...args) => {
+        const fn = window.__stElectronIPC__;
+        if (typeof fn !== 'function') throw new TypeError('[Stremio+] __stElectronIPC__ bridge not available — preload may not have run');
+        return fn(...args);
+    };
     function escapeHtml(s) {
         if (!s) return '';
         return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
