@@ -1173,9 +1173,9 @@
             <div class="st-search-wrap" id="__st_search_wrap__">
                 <span class="sp-cmd-mode-prefix" id="__st_cmd_prefix__" style="display:none">&gt;</span>
                 <span class="st-search-ghost" id="__st_search_ghost__"></span>
-                <input class="st-search-input" id="__st_search__" placeholder="Search plugins, themes… or ⌘K" autocomplete="off" spellcheck="false" style="display:block">
+                <input class="st-search-input" id="__st_search__" placeholder="Search plugins, themes… or Ctrl+K" autocomplete="off" spellcheck="false" style="display:block">
             </div>
-            <span class="sp-search-kbd-hint" id="__st_search_kbd_hint__"><span class="sp-kbd">⌘K</span></span>
+            <span class="sp-search-kbd-hint" id="__st_search_kbd_hint__"><span class="sp-kbd">Ctrl+K</span></span>
         </div>
         <!-- Inline command palette (Raycast-style dropdown) -->
         <div id="__st_inline_pal__">
@@ -1216,7 +1216,7 @@
   color: red;
 }"></textarea>
                 <div class="st-editor-footer">
-                    <span class="st-editor-hint">Auto-saved · <span class="st-kbd">⌘S</span> to apply immediately</span>
+                    <span class="st-editor-hint">Auto-saved · <span class="st-kbd">Ctrl+S</span> to apply immediately</span>
                     <button class="st-editor-clear" id="__st_ed_clear__">Clear</button>
                 </div>
             </div>
@@ -1283,7 +1283,7 @@
                 <div class="sp-set-hero-logo">S<span class="sp-set-hero-plus">+</span></div>
                 <div class="sp-set-hero-info">
                     <div class="sp-set-hero-name">Stremio<span class="sp-set-hero-plus">+</span></div>
-                    <div class="sp-set-hero-version" id="__st_version__">v26.0</div>
+                    <div class="sp-set-hero-version" id="__st_version__">v26.0.2</div>
                 </div>
             </div>
             <!-- Stats row -->
@@ -1553,8 +1553,8 @@
                 <div class="sp-set-section-title">Keyboard shortcuts</div>
                 <div class="sp-set-row"><span class="sp-set-row-label"><span class="sp-kbd">⇧ Space</span></span><span class="sp-set-row-aside">Open / close menu</span></div>
                 <div class="sp-set-row"><span class="sp-set-row-label"><span class="sp-kbd">Esc</span></span><span class="sp-set-row-aside">Close menu</span></div>
-                <div class="sp-set-row"><span class="sp-set-row-label"><span class="sp-kbd">⌘K</span></span><span class="sp-set-row-aside">Command palette</span></div>
-                <div class="sp-set-row"><span class="sp-set-row-label"><span class="sp-kbd">⌘S</span></span><span class="sp-set-row-aside">Apply CSS immediately</span></div>
+                <div class="sp-set-row"><span class="sp-set-row-label"><span class="sp-kbd">Ctrl+K</span></span><span class="sp-set-row-aside">Command palette</span></div>
+                <div class="sp-set-row"><span class="sp-set-row-label"><span class="sp-kbd">Ctrl+S</span></span><span class="sp-set-row-aside">Apply CSS immediately</span></div>
             </div>
         </div>
         <!-- ── Footer (always visible, pinned last) ── -->
@@ -1562,7 +1562,7 @@
             <button type="button" class="sp-foot-btn" id="__st_pal_foot__">
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>
                 Command palette
-                <span class="sp-kbd">⌘K</span>
+                <span class="sp-kbd">Ctrl+K</span>
             </button>
             <div class="sp-foot-spacer"></div>
             <button class="st-folder-btn" id="__st_folder__" style="border:none;background:transparent;color:rgba(255,255,255,0.35);gap:5px;padding:4px 8px;cursor:pointer">
@@ -1879,12 +1879,7 @@
     changelogModal.addEventListener('mousedown', e => { if (e.target === changelogModal) changelogModal.classList.remove('open'); });
     
     // ── Helpers ───────────────────────────────────────────────────────────────────
-    // Read the bridge lazily so it works even if the preload sets it after the IIFE runs.
-    const invoke = (...args) => {
-        const fn = window.__stElectronIPC__;
-        if (typeof fn !== 'function') throw new TypeError('[Stremio+] __stElectronIPC__ bridge not available — preload may not have run');
-        return fn(...args);
-    };
+    const invoke = window.__stElectronIPC__;
     function escapeHtml(s) {
         if (!s) return '';
         return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -4907,7 +4902,7 @@
             const searchEl = document.getElementById('__st_search__');
             if (searchEl) {
                 searchEl.value = searchEl._prevVal || '';
-                searchEl.placeholder = searchEl._prevPlaceholder || 'Search plugins, themes… or ⌘K';
+                searchEl.placeholder = searchEl._prevPlaceholder || 'Search plugins, themes… or Ctrl+K';
             }
             if (cmdPrefix) cmdPrefix.style.display = 'none';
             if (searchRow) searchRow.classList.remove('cmd-mode');

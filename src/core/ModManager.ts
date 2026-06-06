@@ -131,7 +131,7 @@ class ModManager {
 
         // Sanitise filename exactly like the Rust implementation
         const safe = metaData.name.replace(/[^a-zA-Z0-9\-_]/g, '-');
-        const ext  = isTheme ? 'css' : 'plugin.js';
+        const ext  = isTheme ? 'theme.css' : 'plugin.js';
         const filePath = join(saveDir, `${safe}.${ext}`);
         writeFileSync(filePath, source, 'utf-8');
 
